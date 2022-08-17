@@ -1,32 +1,33 @@
-import { StyleSheet } from 'react-native';
+import React from "react";
+import { Button, ScrollView } from "react-native";
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
+import { Text } from "../components/Themed";
+import { Employee, useFetchEmployees } from "../hooks/useFetchEmployees";
+import { RootTabScreenProps } from "../types";
 
-export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+export const TabOneScreen = ({ navigation }: RootTabScreenProps<"TabOne">) => {
+  const employeeResult = useFetchEmployees();
+
+  const gotoDetails = (employee: Employee) => () =>
+    navigation.navigate("Modal", { employee });
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
-    </View>
+    <ScrollView>
+      {employeeResult.error ? (
+        <Text>{employeeResult.error}</Text>
+      ) : employeeResult.loading ? (
+        <Text>{"Laster..."}</Text>
+      ) : (
+        employeeResult.employees?.map((employee, index) => {
+          return (
+            <Button
+              title={employee.name}
+              onPress={gotoDetails(employee)}
+              key={index}
+            />
+          );
+        })
+      )}
+    </ScrollView>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
+};

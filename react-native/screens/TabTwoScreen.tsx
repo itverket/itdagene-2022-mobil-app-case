@@ -1,31 +1,55 @@
-import { StyleSheet } from 'react-native';
+import React from "react";
+import { Dimensions, FlatList, Image, StyleSheet } from "react-native";
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import { Text, View } from "../components/Themed";
+import { Employee, useFetchEmployees } from "../hooks/useFetchEmployees";
+import { RootTabScreenProps } from "../types";
 
-export default function TabTwoScreen() {
+const IMAGE_WIDTH = Dimensions.get("window").width;
+const IMAGE_HEIGHT = IMAGE_WIDTH * 1.3;
+
+export const TabTwoScreen = ({ navigation }: RootTabScreenProps<"TabTwo">) => {
+  const employeeResult = useFetchEmployees();
+
+  const renderEmployee = ({ item }: { item: Employee }) => {
+    return (
+      <Image
+        style={styles.image}
+        key={item.name}
+        source={{ uri: item.image }}
+        resizeMode="cover"
+      />
+    );
+  };
+
+  const keyExtractor = (employee: Employee) => employee.name;
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+    <View>
+      {employeeResult.error ? (
+        <Text style={styles.title}>{employeeResult.error}</Text>
+      ) : employeeResult.loading ? (
+        <Text style={styles.title}>{"Laster..."}</Text>
+      ) : (
+        <FlatList
+          data={employeeResult.employees}
+          horizontal={true}
+          renderItem={renderEmployee}
+          keyExtractor={keyExtractor}
+          snapToInterval={IMAGE_WIDTH}
+        />
+      )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  image: {
+    width: IMAGE_WIDTH,
+    height: IMAGE_HEIGHT,
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+    fontWeight: "bold",
   },
 });
