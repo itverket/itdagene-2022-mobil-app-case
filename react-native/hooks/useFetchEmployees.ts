@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-interface Employee {
+export interface Employee {
   Name: string;
   Image: string;
 }
