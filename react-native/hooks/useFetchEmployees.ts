@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 export interface Employee {
-  Name: string;
-  Image: string;
+  name: string;
+  image: string;
 }
 
 interface EmployeeResponse {
@@ -25,12 +25,14 @@ export const useFetchEmployees = (): EmployeeResponse => {
     fetch(url)
       .then((response) => {
         response.json().then((json) => {
-          const data = json as Employee[];
-          data.forEach((employee) => {
-            employee.Image = cleanUrl(employee.Image);
+          const employees: Employee[] = json.map((employee: any) => {
+            return {
+              name: employee.Name,
+              image: cleanUrl(employee.Image),
+            } as Employee;
           });
 
-          setEmployees(json as Employee[]);
+          setEmployees(employees);
         });
       })
       .catch((error) => {
