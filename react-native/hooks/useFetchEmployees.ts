@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 export interface Employee {
   name: string;
   image: string;
+  originalUrl: string;
 }
 
 interface EmployeeResponse {
@@ -28,6 +29,7 @@ export const useFetchEmployees = (): EmployeeResponse => {
           const employees: Employee[] = json.map((employee: any) => {
             return {
               name: employee.Name,
+              originalUrl: employee.Image,
               image: cleanUrl(employee.Image),
             } as Employee;
           });
@@ -58,6 +60,9 @@ const cleanUrl = (url: string) => {
   const aeRegexCap = /Æ/g;
   const aaRegex = /å/g;
   const aaRegexCap = /Å/g;
+  const eacuteRegexCap = /é/g;
+  const egraveRegexCap = /è/g;
+  const aumlautRegexCap = /ä/g;
 
   return url
     .replace(whiteSpaceRegex, "%20")
@@ -66,5 +71,8 @@ const cleanUrl = (url: string) => {
     .replace(aeRegex, "%C3%A6")
     .replace(aeRegexCap, "%C3%86")
     .replace(aaRegex, "%C3%A5")
-    .replace(aaRegexCap, "%C3%85");
+    .replace(aaRegexCap, "%C3%85")
+    .replace(eacuteRegexCap, "%C3%A9")
+    .replace(egraveRegexCap, "%C3%A8")
+    .replace(aumlautRegexCap, "%C3%A4");
 };
