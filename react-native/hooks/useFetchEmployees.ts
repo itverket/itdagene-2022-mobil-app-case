@@ -11,7 +11,7 @@ interface EmployeeResponse {
   employees?: Employee[];
 }
 
-export const useRetrieveEmployees = (): EmployeeResponse => {
+export const useFetchEmployees = (): EmployeeResponse => {
   const [employees, setEmployees] = useState<Employee[] | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
