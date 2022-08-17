@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 interface Employee {
-  name: string;
-  image: string;
+  Name: string;
+  Image: string;
 }
 
 interface EmployeeResponse {
@@ -24,9 +24,14 @@ export const useRetrieveEmployees = (): EmployeeResponse => {
       "https://employee-image-provider.azurewebsites.net/api/fetchallemployeeimageurls?code=mKJCxaVuYh7BKL1BPlF6IKnwpWV7OILSBBLftRLa4XRd8m9CZWtBpg==";
     fetch(url)
       .then((response) => {
-        console.log({ response });
+        response.json().then((json) => {
+          const data = json as Employee[];
+          data.forEach((employee) => {
+            employee.Image = cleanUrl(employee.Image);
+          });
 
-        response.json().then((json) => setEmployees(json as Employee[]));
+          setEmployees(json as Employee[]);
+        });
       })
       .catch((error) => {
         setError("Kunne ikke laste inn data");
@@ -41,4 +46,23 @@ export const useRetrieveEmployees = (): EmployeeResponse => {
     error,
     employees,
   };
+};
+
+const cleanUrl = (url: string) => {
+  const whiteSpaceRegex = /\s/g;
+  const oeRegex = /ø/g;
+  const oeRegexCap = /Ø/g;
+  const aeRegex = /æ/g;
+  const aeRegexCap = /Æ/g;
+  const aaRegex = /å/g;
+  const aaRegexCap = /Å/g;
+
+  return url
+    .replace(whiteSpaceRegex, "%20")
+    .replace(oeRegex, "%C3%B8")
+    .replace(oeRegexCap, "%C3%98")
+    .replace(aeRegex, "%C3%A6")
+    .replace(aeRegexCap, "%C3%86")
+    .replace(aaRegex, "%C3%A5")
+    .replace(aaRegexCap, "%C3%85");
 };
