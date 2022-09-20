@@ -2,9 +2,8 @@ import React from "react";
 import {Image, StyleSheet, View} from "react-native";
 
 import { Wrapper } from "../components/layout/Wrapper";
-
-import { Text } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
+import { Pressable, Text } from "react-native";
 
 import GameCard from "../components/HomeScreen/GameCard";
 const wordleImg = require("../assets/images/homescreen/wordle_logo.png");
@@ -45,6 +44,15 @@ export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
                     <GameCard cardTitle="Gibberish" imageURL={bhImg} description="Hvem gjemmer seg bak boksen? 😱" bgcolor="grey" />
                 </View>
             </View>
+            <Pressable onPress={() => navigation.navigate("Game", { gameType: 'W' })}>
+              <Text>Wordle</Text>
+            </Pressable>
+            <Pressable onPress={() => navigation.navigate("Game", { gameType: 'B' })}>
+              <Text>Behind the box</Text>
+            </Pressable>
+            <Pressable onPress={() => navigation.navigate("Game", { gameType: 'G' })}>
+              <Text>Hangman</Text>
+            </Pressable>
         </Wrapper>
     );
 };
