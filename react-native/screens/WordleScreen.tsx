@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, ScrollView, StyleSheet } from "react-native";
-import { Card, Paragraph, Title } from "react-native-paper";
+import { ScrollView, StyleSheet } from "react-native";
+import { Button, Card, Paragraph, Title } from "react-native-paper";
 import { Text, View } from "../components/Themed";
 import { Employee, useFetchEmployees } from "../hooks/useFetchEmployees";
 import { getStatuses, CharStatus } from "../lib/statuses";
@@ -39,39 +39,65 @@ interface IWordleKey {
 	onClick: (value: string) => void;
 	status?: CharStatus;
 }
+interface IWordleChar {
+	value: string;
+	status: CharStatus;
+}
+
+const WordleChar = ({ value, status }: IWordleChar) => {
+	const styles = StyleSheet.create({
+		text: {
+			flex: 1,
+			backgroundColor: "pink",
+		},
+	});
+	return (
+		<View>
+			<Text style={styles.text}>{value}</Text>
+		</View>
+	);
+};
 
 const WordleDisplay = ({ guesses, name }: IWordleStats) => {
+	const charStatuses = getStatuses(name, guesses);
+	const n = 6;
+
+	const styles = StyleSheet.create({
+		displayRow: {
+			flex: 1,
+			flexDirection: "row",
+			backgroundColor: "red",
+		},
+		wrapper: {
+			minHeight: 200,
+			backgroundColor: "green",
+		},
+	});
+	console.log(name);
+
 	return (
-		<Card>
-			<Card.Title title="Card Title" subtitle="Card Subtitle" />
-			<Card.Content>
-				<Title>Card title</Title>
-				<Paragraph>Card content</Paragraph>
-			</Card.Content>
-			<Card.Cover source={{ uri: "https://picsum.photos/700" }} />
-			<Card.Actions>
-				<Button title="cancel">Cancel</Button>
-				<Button title="ok">Ok</Button>
-			</Card.Actions>
-		</Card>
+		<View style={styles.wrapper}>
+			{[1, 1, 1, 1, 1, 1].map((_, i) => {
+				<View style={styles.displayRow} key={i}>
+					{name.split("").map((_, j) => {
+						const char = guesses[i]?.split("")[j];
+						return guesses.length > i ? (
+							<WordleChar key={j} value={char} status={charStatuses[char]} />
+						) : (
+							<WordleChar key={j} value="_" status="present" />
+						);
+					})}
+				</View>;
+			})}
+		</View>
 	);
 };
 
 const WordleKey = ({ value, onClick, status = "absent" }: IWordleKey) => {
-	const styles = StyleSheet.create({
-		button: {
-			flex: 1,
-			justifyContent: "space-between",
-			padding: 20,
-			margin: 10,
-		},
-	});
 	return (
-		<View style={styles.button}>
-			<Button title={value} onPress={() => onClick(value)}>
-				{value}
-			</Button>
-		</View>
+		<Button style={styles.button} onPress={() => onClick(value)}>
+			{value}
+		</Button>
 	);
 };
 
@@ -110,7 +136,7 @@ const WordleKeyboard = ({ guesses, name, onCallback }: IWordleKeyboard) => {
 
 	return (
 		<View>
-			<View>
+			<View style={styles.keyboardRow}>
 				{["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"].map((key) => (
 					<WordleKey
 						value={key}
@@ -120,7 +146,7 @@ const WordleKeyboard = ({ guesses, name, onCallback }: IWordleKeyboard) => {
 					/>
 				))}
 			</View>
-			<View>
+			<View style={styles.keyboardRow}>
 				{["A", "S", "D", "F", "G", "H", "J", "K", "L"].map((key) => (
 					<WordleKey
 						value={key}
@@ -130,7 +156,7 @@ const WordleKeyboard = ({ guesses, name, onCallback }: IWordleKeyboard) => {
 					/>
 				))}
 			</View>
-			<View>
+			<View style={styles.keyboardRow}>
 				<WordleKey value="ENTER" onClick={onClick} />
 				{["Z", "X", "C", "V", "B", "N", "M"].map((key) => (
 					<WordleKey
@@ -159,15 +185,41 @@ export const WordleScreen = ({ navigation }: RootTabScreenProps<"Wordle">) => {
 			{!employee ? (
 				<Text>yuhyuh</Text>
 			) : (
-				<>
+				<View style={styles.game}>
 					<WordleDisplay guesses={guesses} name={employee.name} />
 					<WordleKeyboard
 						guesses={guesses}
 						name={employee.name}
 						onCallback={guessCallback}
 					/>
-				</>
+				</View>
 			)}
 		</ScrollView>
 	);
 };
+
+const styles = StyleSheet.create({
+	game: {
+		flex: 1,
+		justifyContent: "space-between",
+	},
+	button: {
+		flex: 1,
+		width: 10,
+		justifyContent: "center",
+		alignItems: "center",
+		padding: 0,
+		margin: 0,
+	},
+	keyboardRow: {
+		flex: 1,
+		flexDirection: "row",
+		flexWrap: "wrap",
+		padding: 0,
+		margin: 0,
+	},
+	text: {
+		flex: 1,
+		backgroundColor: "#d3d6da",
+	},
+});
