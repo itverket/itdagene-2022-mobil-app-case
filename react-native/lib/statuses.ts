@@ -3,27 +3,23 @@ export type CharStatus = "absent" | "present" | "correct" | "none";
 export const getStatuses = (
 	solution: string,
 	guesses: string[]
-): { [key: string]: CharStatus }[] => {
-	const charObjects: { [key: string]: CharStatus }[] = [];
+): { [key: string]: CharStatus } => {
+	const charObj: { [key: string]: CharStatus } = {};
 	const splitSolution = solution.toLocaleUpperCase().split("");
 
 	guesses.forEach((word) => {
-		const charObj: { [key: string]: CharStatus } = {};
 		word.split("").forEach((letter, i) => {
 			if (!splitSolution.includes(letter)) {
 				charObj[letter] = "absent";
-			} else if (letter === splitSolution[i]) {
+			} else if (letter === splitSolution[i] || charObj[letter] === "correct") {
 				charObj[letter] = "correct";
 			} else {
 				charObj[letter] = "present";
 			}
 		});
-		const ncharObj = JSON.parse(JSON.stringify(charObj)); // Make copy
-		charObjects.push(ncharObj);
 	});
 
-	if (charObjects.length === 0) return [{}];
-	return charObjects;
+	return charObj;
 };
 
 export const getStatusesDisplay = (

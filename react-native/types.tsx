@@ -18,6 +18,9 @@ export type RootStackParamList = {
 		employee: Employee;
 	};
 	NotFound: undefined;
+	Game: {
+		gameType: "W" | "B" | "G";
+	};
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -27,10 +30,6 @@ export type RootTabParamList = {
 	Home: undefined;
 	LeaderBoard: undefined;
 	UserSettings: undefined;
-	Wordle: undefined;
-	Game: {
-		gameType: "W" | "B" | "H";
-	};
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =

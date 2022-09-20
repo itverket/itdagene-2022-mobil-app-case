@@ -27,6 +27,7 @@ import {
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import { UserSettingsScreen } from "../screens/UserSettingsScreen";
+import { GameScreen } from "../screens/GameScreen";
 
 export default function Navigation() {
 	return (
@@ -54,6 +55,11 @@ function RootNavigator() {
 				name="NotFound"
 				component={NotFoundScreen}
 				options={{ title: "Oops!" }}
+			/>
+			<Stack.Screen
+				name="Game"
+				component={GameScreen}
+				options={{ headerShown: false }}
 			/>
 			<Stack.Group screenOptions={{ presentation: "modal" }}>
 				<Stack.Screen name="Modal" component={ModalScreen} />
