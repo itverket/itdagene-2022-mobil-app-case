@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 
 
 
@@ -27,6 +26,7 @@ export const useFetchEmployees = (): EmployeeResponse => {
   useEffect(() => {
     setLoading(true);
     setError(undefined);
+    console.log(apiToken)
 
     const url = `https://employee-image-provider.azurewebsites.net/api/fetchallemployeeimageurls?code=${apiToken}`;
     fetch(url)
@@ -45,6 +45,7 @@ export const useFetchEmployees = (): EmployeeResponse => {
         });
       })
       .catch((error) => {
+        console.log(error)
         setError("Kunne ikke laste inn data");
       })
       .finally(() => {
