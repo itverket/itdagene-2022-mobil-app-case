@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, Text, Image, Dimensions, TextInput } from "react-native";
+import { View, StyleSheet, Text, Image, Dimensions, TextInput, KeyboardAvoidingView } from "react-native";
 import { Button } from "react-native-paper";
+import GibberishLetterInput from "../components/gibbershletterinput";
 import PriceCounter from "../components/pointscounter";
 import { CurrentScoreContext } from "../context/currentscore/CurrentScoreContext";
 import { Employee } from "../hooks/useFetchEmployees";
@@ -25,22 +26,53 @@ function shuffleString(str: string) {
 }
 
 
+
 export const GibbershScreen = ({employees}:GameProp) => {
     const [currentEmployee, setCurrentEmployee] = React.useState<Employee>(employees[0]);
     const [currentEmployeeIndex, setCurrentEmployeeIndex] = React.useState<number>(0);
     const [currentEmployeeFirstName, setCurrentEmployeeFirstName] = React.useState<string>(currentEmployee.name.split(' ')[0]);
     const [currentNameShuffle, setCurrentNameShuffle] = React.useState<string>(currentEmployee.name.split(' ')[0]);
-    const [userInput, setUserInput] = React.useState<string>("");
+
 
     const {currentScore, setCurrentScore} = React.useContext(CurrentScoreContext);
 
 
+    const [userInputDict, setUserInputDict] = React.useState<Map<number, string>>(new Map<number, string>())
+
+
+
+
+
+
+function addToUserInputDict(letterIndex: number, letter: string) {
+  setUserInputDict(new Map(userInputDict.set(letterIndex, letter)));
+}
+
+function checkIfInputAtIndexIsCorrect(value:string, key:number, map:Map<number, string>): boolean {
+  return value === currentEmployeeFirstName[key];
+}
+
+function checkIfCorrectAnswer():boolean {  {
+return Array.from(userInputDict.values()).some((value:string, key:number) => value.toUpperCase() === currentEmployeeFirstName[key].toUpperCase());
+}
+
+
+}
+
 useEffect(() => {
-    if(userInput.toUpperCase() == currentEmployeeFirstName) {
-        setCurrentScore(currentScore + 1);
-        setNextEmployee();
+  console.log("tirgger");
+  if(userInputDict.size == currentEmployeeFirstName.length) {
+    let correct = checkIfCorrectAnswer()
+    console.log("correct", correct, currentEmployeeFirstName, userInputDict.values());
+    if(correct) {
+      setCurrentScore(currentScore + 1);
+      
     }
-},[userInput])
+    setNextEmployee();
+    setUserInputDict(new Map<number, string>());
+
+  }
+},[userInputDict])
     
 
     useEffect(() => {
@@ -58,7 +90,8 @@ useEffect(() => {
         setCurrentEmployeeIndex(currentEmployeeIndex + 1)
         setCurrentEmployee(employees[currentEmployeeIndex + 1])
         setCurrentEmployeeFirstName(currentEmployee.name.split(' ')[0].toUpperCase())
-        setUserInput("");
+        // setUserInput("");
+        setUserInputDict(new Map<number, string>());
         }
     }
 
@@ -73,8 +106,10 @@ useEffect(() => {
 
 
 
+
+
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container}>
         <PriceCounter/>
 
 
@@ -101,28 +136,26 @@ useEffect(() => {
           resizeMode="cover"
           />
 
-        <Text style={styles.title}>{currentEmployeeFirstName}</Text>
-        <TextInput
-        style={styles.input}
-        onChangeText={(input:string) => setUserInput(input)}
-        value={userInput}
-      />
-        <Button onPress={setNextEmployee}>Neste</Button>
         <Text style={styles.title}>{currentNameShuffle}</Text>
         </>
     
-    }
-        <View></View>
+  }
+
+        <View style={{flexDirection:"row"}}>
+          {currentEmployeeFirstName.split("").map((letter, index) => {
+            return <GibberishLetterInput key= {currentEmployeeFirstName +index} letterIndex={index}  addToUserInputDict={addToUserInputDict}  />
+          }
+          )}
+        </View>
 
     <Button onPress={exit}>Restart</Button>
         
-      </View>
+      </KeyboardAvoidingView>
     );
   };
   
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
       alignItems: "center",
       justifyContent: "center",
       padding: 20,
