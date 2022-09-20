@@ -1,6 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import GameModeProvider from './context/GameModeProvider';
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import GameModeProvider from "./context/GameModeProvider";
 
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
@@ -32,7 +32,7 @@ export default function App() {
 						<Navigation />
 						<StatusBar />
 					</SafeAreaProvider>
-          		</GameModeProvider>
+				</GameModeProvider>
 			</PaperProvider>
 		);
 	}

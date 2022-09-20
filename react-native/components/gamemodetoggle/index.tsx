@@ -59,7 +59,7 @@ export default function GameModeToggleSwitch() {
     text: {
         fontSize: 20,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
     marginRight: 10,
 
     }

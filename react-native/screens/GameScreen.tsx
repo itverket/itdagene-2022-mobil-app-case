@@ -6,8 +6,9 @@ import { GameModeContext } from "../context/GameModeContext";
 import { useFetchEmployees } from "../hooks/useFetchEmployees";
 import { GameMode } from "../models/gameStateEnum";
 import { RootStackScreenProps } from "../types";
+import WordleScreen from "./WordleScreen";
 
-export const GameScreen = ({ route }: RootStackScreenProps<"Game">) => {
+export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenProps<"Game">) => {
     const [isNormalPlay, setIsNormalPlay] = useState<boolean>(false);
     const {gameMode} = useContext(GameModeContext);
     const {loading, employees, error} = useFetchEmployees();
@@ -20,11 +21,21 @@ export const GameScreen = ({ route }: RootStackScreenProps<"Game">) => {
         }
     }, [gameMode]);
 
+    const getContent = () => {
+        switch (gameType) {
+            case "W":
+                return <WordleScreen />;
+            default: 
+                return <Text>Default</Text>
+        }
+    }
+
     return (
         <Wrapper>
             {loading && <Text>Loading...</Text>}
             {error && <Text>Error: {error}</Text>}
             {!isNormalPlay && employees && <FlashCardComponent employees={employees!} setIsNormalPlay={setIsNormalPlay} />}
+            {isNormalPlay && employees && getContent()}
         </Wrapper>
     );
 };
