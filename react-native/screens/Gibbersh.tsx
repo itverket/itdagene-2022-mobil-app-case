@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, Text, Image, Dimensions, TextInput } from "react-native";
 import { Button } from "react-native-paper";
+import PriceCounter from "../components/pointscounter";
+import { CurrentScoreContext } from "../context/currentscore/CurrentScoreContext";
 import { Employee } from "../hooks/useFetchEmployees";
 
 
@@ -30,9 +32,14 @@ export const GibbershScreen = ({employees}:GameProp) => {
     const [currentNameShuffle, setCurrentNameShuffle] = React.useState<string>(currentEmployee.name.split(' ')[0]);
     const [userInput, setUserInput] = React.useState<string>("");
 
+    const {currentScore, setCurrentScore} = React.useContext(CurrentScoreContext);
+
 
 useEffect(() => {
-    if(userInput.toUpperCase() == currentEmployeeFirstName) setNextEmployee();
+    if(userInput.toUpperCase() == currentEmployeeFirstName) {
+        setCurrentScore(currentScore + 1);
+        setNextEmployee();
+    }
 },[userInput])
     
 
@@ -55,16 +62,20 @@ useEffect(() => {
         }
     }
 
-    const restart = () => { 
+
+    const exit = () => { 
 
         setCurrentEmployeeIndex(0)
         setCurrentEmployee(employees[0])
+        setCurrentScore(0)
+
     }
 
 
 
     return (
       <View style={styles.container}>
+        <PriceCounter/>
 
 
 
@@ -78,7 +89,7 @@ useEffect(() => {
           resizeMode="cover"
           />
         <Text style={styles.title}>"Spillet er ferdig"</Text>
-        <Button onPress={()=> {}}>Avslutt</Button>
+        <Button onPress={exit}>Avslutt</Button>
         </>
 
         :
@@ -103,7 +114,7 @@ useEffect(() => {
     }
         <View></View>
 
-    <Button onPress={restart}>Restart</Button>
+    <Button onPress={exit}>Restart</Button>
         
       </View>
     );

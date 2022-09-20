@@ -22,7 +22,7 @@ export default function PriceCounter() {
     return (
       <View style={styles.container}>
             
-        <Text style={styles.text}> {currentScore}</Text>
+        <Text style={styles.text}> Poeng: {currentScore}</Text>
 
       
         
@@ -40,7 +40,7 @@ export default function PriceCounter() {
     text: {
         fontSize: 20,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
     marginRight: 10,
 
     }
