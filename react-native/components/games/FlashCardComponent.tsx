@@ -1,18 +1,17 @@
-import { FC, useEffect, useRef, useState } from "react";
-import { StyleSheet } from "react-native";
+import { FC, useContext, useEffect, useRef } from "react";
 import { Paragraph, Title } from "react-native-paper";
 // @ts-ignore
 import SwipeCards from "react-native-swipe-cards-deck";
+import { GameContext } from "../../context/GameContext";
 import { Employee } from "../../hooks/useFetchEmployees";
 import { FlashCard } from "../cards/FlashCard";
 
 type Props = {
-    employees: Employee[];
     setIsNormalPlay: (isNormalPlay: boolean) => void;
 }
 
-export const FlashCardComponent: FC<Props> = ({employees, setIsNormalPlay}) => {
-    const [array, setArray] = useState<Employee[]>([]);
+export const FlashCardComponent: FC<Props> = ({setIsNormalPlay}) => {
+    const {employees, learningArray, setLearningArray} = useContext(GameContext);
 
     const swipeRef = useRef(null);
     // @ts-ignore
@@ -21,13 +20,13 @@ export const FlashCardComponent: FC<Props> = ({employees, setIsNormalPlay}) => {
     const forceNope = () => swipeRef.current.swipeNope();
 
     useEffect(() => {
-        if (array.length === 10) {
+        if (learningArray.length === 10) {
             setIsNormalPlay(true);
         }
-    }, [array]);
+    }, [learningArray]);
 
     function handleNope(card: Employee) {
-        setArray([...array, card]);
+        setLearningArray([...learningArray, card]);
         return true;
     };
 

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Text } from "react-native";
 import { FlashCardComponent } from "../components/games/FlashCardComponent";
 import { Wrapper } from "../components/layout/Wrapper";
-import { GameModeContext } from "../context/GameModeContext";
+import { GameContext } from "../context/GameContext";
 import { useFetchEmployees } from "../hooks/useFetchEmployees";
 import { GameMode } from "../models/gameStateEnum";
 import { RootStackScreenProps } from "../types";
@@ -10,7 +10,7 @@ import WordleScreen from "./WordleScreen";
 
 export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenProps<"Game">) => {
     const [isNormalPlay, setIsNormalPlay] = useState<boolean>(false);
-    const {gameMode} = useContext(GameModeContext);
+    const {gameMode, setEmployees} = useContext(GameContext);
     const {loading, employees, error} = useFetchEmployees();
 
     useEffect(() => {
@@ -19,7 +19,11 @@ export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenPr
         } else {
             setIsNormalPlay(false);
         }
-    }, [gameMode]);
+        if (employees) {
+            setEmployees(employees);
+        }
+
+    }, [gameMode, employees]);
 
     const getContent = () => {
         switch (gameType) {
@@ -34,8 +38,8 @@ export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenPr
         <Wrapper>
             {loading && <Text>Loading...</Text>}
             {error && <Text>Error: {error}</Text>}
-            {!isNormalPlay && employees && <FlashCardComponent employees={employees!} setIsNormalPlay={setIsNormalPlay} />}
-            {isNormalPlay && employees && getContent()}
+            {!isNormalPlay && <FlashCardComponent setIsNormalPlay={setIsNormalPlay} />}
+            {isNormalPlay && getContent()}
         </Wrapper>
     );
 };
