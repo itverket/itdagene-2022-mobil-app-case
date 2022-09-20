@@ -1,15 +1,23 @@
-import React from "react";
-import { Dimensions, FlatList, Image, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
+import { Button, Dimensions, FlatList, Image, StyleSheet } from "react-native";
+import GameModeToggleSwitch from "../components/gamemodetoggle";
+import { Wrapper } from "../components/layout/Wrapper";
 
 import { Text, View } from "../components/Themed";
+import { GameModeContext } from "../context/GameModeContext";
 import { Employee, useFetchEmployees } from "../hooks/useFetchEmployees";
+import { GameMode } from "../models/gameStateEnum";
 import { RootTabScreenProps } from "../types";
 
 const IMAGE_WIDTH = Dimensions.get("window").width;
 const IMAGE_HEIGHT = IMAGE_WIDTH * 1.3;
 
-export const TabTwoScreen = ({ navigation }: RootTabScreenProps<"TabTwo">) => {
+export const LeaderBoard = ({ navigation }: RootTabScreenProps<"LeaderBoard">) => {
   const employeeResult = useFetchEmployees();
+
+
+
+
 
   const renderEmployee = ({ item }: { item: Employee }) => {
     return (
@@ -19,8 +27,11 @@ export const TabTwoScreen = ({ navigation }: RootTabScreenProps<"TabTwo">) => {
           key={item.name}
           source={{ uri: item.image }}
           resizeMode="cover"
-        />
+          />
         <Text> {item.gender}</Text>
+       
+          <GameModeToggleSwitch/>
+
       </View>
     );
   };
@@ -28,7 +39,7 @@ export const TabTwoScreen = ({ navigation }: RootTabScreenProps<"TabTwo">) => {
   const keyExtractor = (employee: Employee) => employee.name;
 
   return (
-    <View>
+    <Wrapper>
       {employeeResult.error ? (
         <Text style={styles.title}>{employeeResult.error}</Text>
       ) : employeeResult.loading ? (
@@ -42,7 +53,7 @@ export const TabTwoScreen = ({ navigation }: RootTabScreenProps<"TabTwo">) => {
           snapToInterval={IMAGE_WIDTH}
         />
       )}
-    </View>
+    </Wrapper>
   );
 };
 
