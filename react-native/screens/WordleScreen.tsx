@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Button, Card, Paragraph, Switch, Title } from "react-native-paper";
 import { Wrapper } from "../components/layout/Wrapper";
+import { GameModeContext } from "../context/GameModeContext";
 import { Employee } from "../hooks/useFetchEmployees";
 import { getStatuses, getStatusesDisplay, CharStatus } from "../lib/statuses";
 
@@ -248,7 +249,16 @@ const WordleScreen = () => {
 	const [guess, setGuess] = useState<string>("");
 	const [gameOver, setGameOver] = useState<boolean>(false);
 	const [isSwitchOn, setIsSwitchOn] = useState(false);
-	const employee: Employee = testData[0];
+	let { employee } = React.useContext(GameModeContext);
+	employee = employee ?? testData[0]; // TODO: remove this later on
+
+	if (!employee)
+		return (
+			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+				<Text>No employees found!</Text>
+			</View>
+		);
+
 	const firstName = employee.name.split(" ")[0];
 	const tries = 6;
 
