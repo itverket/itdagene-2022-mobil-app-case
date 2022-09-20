@@ -14,6 +14,7 @@ interface Card {
 	description: string;
 	bgcolor: string;
 	onPress: () => void;
+	large?: boolean;
 }
 
 const IMAGE_WIDTH = Dimensions.get("window").width;
@@ -25,6 +26,7 @@ const GameCard = ({
 	description,
 	bgcolor,
 	onPress,
+	large = false,
 }: Card) => {
 	const styles = StyleSheet.create({
 		container: {
@@ -40,8 +42,10 @@ const GameCard = ({
 		},
 		card: {
 			margin: 12,
-			width: 160,
-			height: 160,
+			width: large
+				? Dimensions.get("window").width - 24
+				: Dimensions.get("window").width / 2 - 24,
+			height: large ? 120 : 160,
 			backgroundColor: bgcolor,
 			justifyContent: "center",
 			borderRadius: 16,

@@ -29,6 +29,7 @@ export const LeaderBoard = ({
 			</View>
 		);
 	};
+
 	return (
 		<Wrapper>
 			<View style={styles.title}>

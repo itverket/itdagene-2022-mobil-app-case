@@ -6,7 +6,9 @@ import { RootTabScreenProps } from "../types";
 
 import GameCard from "../components/HomeScreen/GameCard";
 import GameModeToggleSwitch from "../components/gamemodetoggle";
+
 const wordleImg = require("../assets/images/homescreen/wordle_logo.png");
+const invisImg = require("../assets/images/homescreen/invis.png");
 const bhImg = require("../assets/images/homescreen/behindBox_logo.png");
 const gbImg = require("../assets/images/homescreen/gibberish_logo.png");
 const logo = require("../assets/images/homescreen/logo.png");
@@ -28,7 +30,7 @@ export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
 		},
 		cardContainer: {
 			flexDirection: "row",
-			justifyContent: "flex-start",
+			justifyContent: "center",
 			flexWrap: "wrap",
 		},
 	});
@@ -38,6 +40,14 @@ export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
 			<View style={styles.container}>
 				<Image resizeMode="contain" source={logo} style={styles.logo} />
 				<View style={styles.cardContainer}>
+					<GameCard
+						cardTitle="Random"
+						imageURL={wordleImg}
+						description="Tilfeldig spill 🎲"
+						bgcolor="#ffc9c9"
+						onPress={() => navigation.navigate("Game", { gameType: "W" })}
+						large={true}
+					/>
 					<GameCard
 						cardTitle="Nordle"
 						imageURL={wordleImg}
@@ -58,6 +68,13 @@ export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
 						description="Ranger bokstavene"
 						bgcolor="lightblue"
 						onPress={() => navigation.navigate("Game", { gameType: "G" })}
+					/>
+					<GameCard
+						cardTitle=""
+						imageURL={invisImg}
+						description=""
+						bgcolor="#afffaf"
+						onPress={() => {}}
 					/>
 				</View>
 				<View>
