@@ -200,10 +200,10 @@ const WordleKeyboard = ({
 				}
 			}
 		};
-		window.addEventListener("keyup", listener);
+		/* window.addEventListener("keyup", listener);
 		return () => {
 			window.removeEventListener("keyup", listener);
-		};
+		}; */
 	}, [onCallback]);
 
 	return (

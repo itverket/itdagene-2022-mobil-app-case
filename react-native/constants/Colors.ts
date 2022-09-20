@@ -19,4 +19,5 @@ export default {
   active: '#FCC219',
   notSelected: '#262626',
   bg: '#EAE8FB',
+  sunny: '#F9F871',
 };

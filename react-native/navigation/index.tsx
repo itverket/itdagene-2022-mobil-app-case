@@ -3,16 +3,13 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { Feather, FontAwesome } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
-	NavigationContainer,
-	DefaultTheme,
-	DarkTheme,
+  NavigationContainer,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -21,9 +18,8 @@ import { NotFoundScreen } from "../screens/NotFoundScreen";
 import { LeaderBoard } from "../screens/LeaderBoardScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import {
-	RootStackParamList,
-	RootTabParamList,
-	RootTabScreenProps,
+  RootStackParamList,
+  RootTabParamList,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import { UserSettingsScreen } from "../screens/UserSettingsScreen";
@@ -44,28 +40,25 @@ export default function Navigation() {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-	return (
-		<Stack.Navigator>
-			<Stack.Screen
-				name="Root"
-				component={BottomTabNavigator}
-				options={{ headerShown: false }}
-			/>
-			<Stack.Screen
-				name="NotFound"
-				component={NotFoundScreen}
-				options={{ title: "Oops!" }}
-			/>
-			<Stack.Screen
-				name="Game"
-				component={GameScreen}
-				options={{ headerShown: false }}
-			/>
-			<Stack.Group screenOptions={{ presentation: "modal" }}>
-				<Stack.Screen name="Modal" component={ModalScreen} />
-			</Stack.Group>
-		</Stack.Navigator>
-	);
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="Root"
+        component={BottomTabNavigator}
+      />
+      <Stack.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+      />
+      <Stack.Screen
+        name="Game"
+        component={GameScreen}
+      />
+      <Stack.Group screenOptions={{ presentation: "modal" }}>
+        <Stack.Screen name="Modal" component={ModalScreen} />
+      </Stack.Group>
+    </Stack.Navigator>
+  );
 }
 
 /**
