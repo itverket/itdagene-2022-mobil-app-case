@@ -28,7 +28,7 @@ export type RootTabParamList = {
   LeaderBoard: undefined;
   UserSettings: undefined;
   Game: {
-    gameType: 'W' | 'B' | 'H';
+    gameType: 'W' | 'B' | 'H' | 'G';
   }
 };
 
