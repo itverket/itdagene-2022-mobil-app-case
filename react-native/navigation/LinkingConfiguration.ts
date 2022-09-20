@@ -30,15 +30,11 @@ const linking: LinkingOptions<RootStackParamList> = {
               UserSettingsScreen: 'userSettings',
             },
           },
-          Game: {
-            screens: {
-              GameScreen: 'game',
-            },
-          },
         },
       },
       Modal: 'modal',
       NotFound: '*',
+      Game: 'game',
     },
   },
 };
