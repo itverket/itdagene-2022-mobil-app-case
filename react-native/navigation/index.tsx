@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
 	NavigationContainer,
@@ -18,26 +18,19 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import { ModalScreen } from "../screens/ModalScreen";
 import { NotFoundScreen } from "../screens/NotFoundScreen";
-import { TabTwoScreen } from "../screens/TabTwoScreen";
-import { TabOneScreen } from "../screens/TabOneScreen";
+import { LeaderBoard } from "../screens/LeaderBoardScreen";
+import { HomeScreen } from "../screens/HomeScreen";
 import {
 	RootStackParamList,
 	RootTabParamList,
 	RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
-import { WordleScreen } from "../screens/WordleScreen";
+import { UserSettingsScreen } from "../screens/UserSettingsScreen";
 
-export default function Navigation({
-	colorScheme,
-}: {
-	colorScheme: ColorSchemeName;
-}) {
+export default function Navigation() {
 	return (
-		<NavigationContainer
-			linking={LinkingConfiguration}
-			theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-		>
+		<NavigationContainer linking={LinkingConfiguration}>
 			<RootNavigator />
 		</NavigationContainer>
 	);
@@ -80,33 +73,47 @@ function BottomTabNavigator() {
 
 	return (
 		<BottomTab.Navigator
-			initialRouteName="TabOne"
+			initialRouteName="Home"
 			screenOptions={{
 				tabBarActiveTintColor: Colors[colorScheme].tint,
+				headerShown: false,
+				tabBarShowLabel: false,
 			}}
 		>
 			<BottomTab.Screen
-				name="TabOne"
-				component={TabOneScreen}
+				name="UserSettings"
+				component={UserSettingsScreen}
 				options={{
-					title: "Eksempel 1",
-					tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+					tabBarIcon: ({ focused }) => (
+						<TabBarIcon
+							name="user"
+							color={focused ? Colors.active : Colors.notSelected}
+						/>
+					),
 				}}
 			/>
 			<BottomTab.Screen
-				name="TabTwo"
-				component={TabTwoScreen}
+				name="Home"
+				component={HomeScreen}
 				options={{
-					title: "Eksempel 2",
-					tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+					tabBarIcon: ({ focused }) => (
+						<TabBarIcon
+							name="home"
+							color={focused ? Colors.active : Colors.notSelected}
+						/>
+					),
 				}}
 			/>
 			<BottomTab.Screen
-				name="Wordle"
-				component={WordleScreen}
+				name="LeaderBoard"
+				component={LeaderBoard}
 				options={{
-					title: "Wordle",
-					tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+					tabBarIcon: ({ focused }) => (
+						<TabBarIcon
+							name="bar-chart-2"
+							color={focused ? Colors.active : Colors.notSelected}
+						/>
+					),
 				}}
 			/>
 		</BottomTab.Navigator>
@@ -117,8 +124,8 @@ function BottomTabNavigator() {
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
 function TabBarIcon(props: {
-	name: React.ComponentProps<typeof FontAwesome>["name"];
+	name: React.ComponentProps<typeof Feather>["name"];
 	color: string;
 }) {
-	return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+	return <Feather size={30} style={{ marginBottom: -3 }} {...props} />;
 }

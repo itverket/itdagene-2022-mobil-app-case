@@ -4,7 +4,7 @@ import { Button, Card, Paragraph, Title } from "react-native-paper";
 import { Text, View } from "../components/Themed";
 import { Employee, useFetchEmployees } from "../hooks/useFetchEmployees";
 import { getStatuses, CharStatus } from "../lib/statuses";
-import { RootTabScreenProps } from "../types";
+import { RootStackScreenProps, RootTabScreenProps } from "../types";
 
 const testData: Employee[] = [
 	{

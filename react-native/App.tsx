@@ -1,5 +1,6 @@
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import GameModeProvider from './context/GameModeProvider';
 
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
@@ -19,17 +20,18 @@ const theme = {
 
 export default function App() {
 	const isLoadingComplete = useCachedResources();
-	const colorScheme = useColorScheme();
 
 	if (!isLoadingComplete) {
 		return null;
 	} else {
 		return (
 			<PaperProvider theme={theme}>
-				<SafeAreaProvider>
-					<Navigation colorScheme={colorScheme} />
-					<StatusBar />
-				</SafeAreaProvider>
+				<GameModeProvider>
+					<SafeAreaProvider>
+						<Navigation />
+						<StatusBar />
+					</SafeAreaProvider>
+          		</GameModeProvider>
 			</PaperProvider>
 		);
 	}
