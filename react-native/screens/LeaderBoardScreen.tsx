@@ -1,5 +1,6 @@
 import React from "react";
 import { Dimensions, FlatList, Image, StyleSheet } from "react-native";
+import { Wrapper } from "../components/layout/Wrapper";
 
 import { Text, View } from "../components/Themed";
 import { Employee, useFetchEmployees } from "../hooks/useFetchEmployees";
@@ -8,7 +9,7 @@ import { RootTabScreenProps } from "../types";
 const IMAGE_WIDTH = Dimensions.get("window").width;
 const IMAGE_HEIGHT = IMAGE_WIDTH * 1.3;
 
-export const TabTwoScreen = ({ navigation }: RootTabScreenProps<"TabTwo">) => {
+export const LeaderBoard = ({ navigation }: RootTabScreenProps<"LeaderBoard">) => {
   const employeeResult = useFetchEmployees();
 
   const renderEmployee = ({ item }: { item: Employee }) => {
@@ -28,7 +29,7 @@ export const TabTwoScreen = ({ navigation }: RootTabScreenProps<"TabTwo">) => {
   const keyExtractor = (employee: Employee) => employee.name;
 
   return (
-    <View>
+    <Wrapper>
       {employeeResult.error ? (
         <Text style={styles.title}>{employeeResult.error}</Text>
       ) : employeeResult.loading ? (
@@ -42,7 +43,7 @@ export const TabTwoScreen = ({ navigation }: RootTabScreenProps<"TabTwo">) => {
           snapToInterval={IMAGE_WIDTH}
         />
       )}
-    </View>
+    </Wrapper>
   );
 };
 
