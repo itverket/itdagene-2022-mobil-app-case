@@ -8,7 +8,7 @@ workflows:
       groups:
         - keystore_credentials
       vars:
-        PACKAGE_NAME: "no.itverket.itdagene.reactnative"
+        PACKAGE_NAME: "no.itverket.itdagene.reactnativejuki"
     scripts:
       - name: Set up keystore
         script: |
@@ -34,6 +34,7 @@ workflows:
     publishing:
       email:
         recipients:
+          - shirajuki@duck.com
           - abe@itverket.no
           - bv@itverket.no
         notify:
