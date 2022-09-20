@@ -43,16 +43,16 @@ export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
                     <GameCard cardTitle="Behind Box" imageURL={bhImg} description="Hvem gjemmer seg bak boksen? 😱" bgcolor="#F9F871" />
                     <GameCard cardTitle="Gibberish" imageURL={bhImg} description="Hvem gjemmer seg bak boksen? 😱" bgcolor="grey" />
                 </View>
+                <Pressable onPress={() => navigation.navigate("Game", { gameType: 'W' })}>
+                <Text>Wordle</Text>
+                </Pressable>
+                <Pressable onPress={() => navigation.navigate("Game", { gameType: 'B' })}>
+                <Text>Behind the box</Text>
+                </Pressable>
+                <Pressable onPress={() => navigation.navigate("Game", { gameType: 'G' })}>
+                <Text>Hangman</Text>
+                </Pressable>
             </View>
-            <Pressable onPress={() => navigation.navigate("Game", { gameType: 'W' })}>
-              <Text>Wordle</Text>
-            </Pressable>
-            <Pressable onPress={() => navigation.navigate("Game", { gameType: 'B' })}>
-              <Text>Behind the box</Text>
-            </Pressable>
-            <Pressable onPress={() => navigation.navigate("Game", { gameType: 'G' })}>
-              <Text>Hangman</Text>
-            </Pressable>
         </Wrapper>
     );
 };
