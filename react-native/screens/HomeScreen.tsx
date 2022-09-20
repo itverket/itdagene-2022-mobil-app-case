@@ -3,11 +3,9 @@ import { Image, StyleSheet, View } from "react-native";
 
 import { Wrapper } from "../components/layout/Wrapper";
 import { RootTabScreenProps } from "../types";
-import { Pressable, Text } from "react-native";
 
 import GameCard from "../components/HomeScreen/GameCard";
 import GameModeToggleSwitch from "../components/gamemodetoggle";
-import WordleScreen from "./WordleScreen";
 const wordleImg = require("../assets/images/homescreen/wordle_logo.png");
 const bhImg = require("../assets/images/homescreen/behindBox_logo.png");
 const gbImg = require("../assets/images/homescreen/gibberish_logo.png");
