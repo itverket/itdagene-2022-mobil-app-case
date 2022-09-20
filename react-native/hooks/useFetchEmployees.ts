@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 
+import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+
+
+
 export interface Employee {
   name: string;
   gender: "male" | "female";
@@ -13,7 +17,7 @@ interface EmployeeResponse {
   employees?: Employee[];
 }
 
-const apiToken = "todo_replace_with_valid_token";
+const apiToken = process.env.REACT_APP_API_TOKEN
 
 export const useFetchEmployees = (): EmployeeResponse => {
   const [employees, setEmployees] = useState<Employee[] | undefined>(undefined);
