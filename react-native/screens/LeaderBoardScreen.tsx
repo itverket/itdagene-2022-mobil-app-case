@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { Text, Title } from "react-native-paper";
 import { Wrapper } from "../components/layout/Wrapper";
-import { GameModeContext } from "../context/GameModeContext";
 import { RootTabScreenProps } from "../types";
 
 interface IScoreBox {

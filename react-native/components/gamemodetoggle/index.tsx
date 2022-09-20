@@ -4,7 +4,7 @@ import { StyleSheet, Switch, Text } from "react-native";
 import { View } from "react-native";
 import { useFonts } from "expo-font";
 import { Entypo } from '@expo/vector-icons';
-import { GameModeContext } from "../../context/GameModeContext";
+import { GameContext } from "../../context/GameContext";
 import { GameMode } from "../../models/gameStateEnum";
 
 
@@ -16,7 +16,7 @@ import { GameMode } from "../../models/gameStateEnum";
  */
 export default function GameModeToggleSwitch() {
 
-    const {gameMode, setGameMode} = React.useContext(GameModeContext);
+    const {gameMode, setGameMode} = React.useContext(GameContext);
     const isLearning = gameMode === GameMode.practice;
 
     

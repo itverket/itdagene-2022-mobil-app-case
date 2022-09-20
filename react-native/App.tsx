@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import GameModeProvider from "./context/GameModeProvider";
+import GameModeProvider from "./context/GameProvider";
 
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
@@ -15,6 +15,7 @@ const theme = {
 	colors: {
 		...DefaultTheme.colors,
 		primary: "#BADA55",
+		
 	},
 };
 
