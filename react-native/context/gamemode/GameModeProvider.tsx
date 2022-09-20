@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GameMode } from "../models/gameStateEnum";
+import { GameMode } from "../../models/gameStateEnum";
 import { GameModeContext } from "./GameModeContext";
 
 

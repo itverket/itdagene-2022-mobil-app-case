@@ -4,7 +4,7 @@ import GameModeToggleSwitch from "../components/gamemodetoggle";
 import { Wrapper } from "../components/layout/Wrapper";
 
 import { Text, View } from "../components/Themed";
-import { GameModeContext } from "../context/GameModeContext";
+import { GameModeContext } from "../context/gamemode/GameModeContext";
 import { Employee, useFetchEmployees } from "../hooks/useFetchEmployees";
 import { GameMode } from "../models/gameStateEnum";
 import { RootTabScreenProps } from "../types";

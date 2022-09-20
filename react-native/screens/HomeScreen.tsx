@@ -16,7 +16,7 @@ export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
   return (
     employeesToList != undefined && employeesToList?.length>=0 &&
     <Wrapper>
-      <Text>Home Sscreen</Text>
+      {/* <Text>Home Sscreen</Text> */}
       <GibbershScreen employees={employeesToList}/>
     </Wrapper>
   );
