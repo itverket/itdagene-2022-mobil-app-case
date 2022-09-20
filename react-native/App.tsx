@@ -20,19 +20,18 @@ const theme = {
 
 export default function App() {
 	const isLoadingComplete = useCachedResources();
-	const colorScheme = useColorScheme();
 
 	if (!isLoadingComplete) {
 		return null;
 	} else {
 		return (
 			<PaperProvider theme={theme}>
-				<SafeAreaProvider>
-          <GameModeProvider>
-					<Navigation colorScheme={colorScheme} />
-					<StatusBar />
-          </GameModeProvider>
-				</SafeAreaProvider>
+				<GameModeProvider>
+					<SafeAreaProvider>
+						<Navigation />
+						<StatusBar />
+					</SafeAreaProvider>
+          		</GameModeProvider>
 			</PaperProvider>
 		);
 	}
