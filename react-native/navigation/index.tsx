@@ -6,9 +6,9 @@
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
+	NavigationContainer,
+	DefaultTheme,
+	DarkTheme,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
@@ -21,21 +21,20 @@ import { NotFoundScreen } from "../screens/NotFoundScreen";
 import { LeaderBoard } from "../screens/LeaderBoardScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import {
-  RootStackParamList,
-  RootTabParamList,
-  RootTabScreenProps,
+	RootStackParamList,
+	RootTabParamList,
+	RootTabScreenProps,
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import { UserSettingsScreen } from "../screens/UserSettingsScreen";
+import { GameScreen } from "../screens/GameScreen";
 
 export default function Navigation() {
-  return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-    >
-      <RootNavigator />
-    </NavigationContainer>
-  );
+	return (
+		<NavigationContainer linking={LinkingConfiguration}>
+			<RootNavigator />
+		</NavigationContainer>
+	);
 }
 
 /**
@@ -45,23 +44,28 @@ export default function Navigation() {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      />
-      <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
-    </Stack.Navigator>
-  );
+	return (
+		<Stack.Navigator>
+			<Stack.Screen
+				name="Root"
+				component={BottomTabNavigator}
+				options={{ headerShown: false }}
+			/>
+			<Stack.Screen
+				name="NotFound"
+				component={NotFoundScreen}
+				options={{ title: "Oops!" }}
+			/>
+			<Stack.Screen
+				name="Game"
+				component={GameScreen}
+				options={{ headerShown: false }}
+			/>
+			<Stack.Group screenOptions={{ presentation: "modal" }}>
+				<Stack.Screen name="Modal" component={ModalScreen} />
+			</Stack.Group>
+		</Stack.Navigator>
+	);
 }
 
 /**
@@ -71,50 +75,63 @@ function RootNavigator() {
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
+	const colorScheme = useColorScheme();
 
-  return (
-    <BottomTab.Navigator
-      initialRouteName="Home"
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-        headerShown: false,
-        tabBarShowLabel: false,
-      }}
-    >
-      <BottomTab.Screen
-        name="UserSettings"
-        component={UserSettingsScreen}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon name="user" color={focused ? Colors.active : Colors.notSelected} />
-          ),
-        }}
-      />
-      <BottomTab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({ focused }) => <TabBarIcon name="home" color={focused ? Colors.active : Colors.notSelected} />,
-        }}
-      />
-      <BottomTab.Screen
-        name="LeaderBoard"
-        component={LeaderBoard}
-        options={{
-          tabBarIcon: ({ focused }) => <TabBarIcon name="bar-chart-2" color={focused ? Colors.active : Colors.notSelected} />,
-        }}
-      />
-    </BottomTab.Navigator>
-  );
+	return (
+		<BottomTab.Navigator
+			initialRouteName="Home"
+			screenOptions={{
+				tabBarActiveTintColor: Colors[colorScheme].tint,
+				headerShown: false,
+				tabBarShowLabel: false,
+			}}
+		>
+			<BottomTab.Screen
+				name="UserSettings"
+				component={UserSettingsScreen}
+				options={{
+					tabBarIcon: ({ focused }) => (
+						<TabBarIcon
+							name="user"
+							color={focused ? Colors.active : Colors.notSelected}
+						/>
+					),
+				}}
+			/>
+			<BottomTab.Screen
+				name="Home"
+				component={HomeScreen}
+				options={{
+					tabBarIcon: ({ focused }) => (
+						<TabBarIcon
+							name="home"
+							color={focused ? Colors.active : Colors.notSelected}
+						/>
+					),
+				}}
+			/>
+			<BottomTab.Screen
+				name="LeaderBoard"
+				component={LeaderBoard}
+				options={{
+					tabBarIcon: ({ focused }) => (
+						<TabBarIcon
+							name="bar-chart-2"
+							color={focused ? Colors.active : Colors.notSelected}
+						/>
+					),
+				}}
+			/>
+		</BottomTab.Navigator>
+	);
 }
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof Feather>["name"];
-  color: string;
+	name: React.ComponentProps<typeof Feather>["name"];
+	color: string;
 }) {
-  return <Feather size={30} style={{ marginBottom: -3 }} {...props} />;
+	return <Feather size={30} style={{ marginBottom: -3 }} {...props} />;
 }
