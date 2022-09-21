@@ -1,49 +1,21 @@
-import React, { Dispatch, useState } from "react";
-
-import { StyleSheet, Switch, Text } from "react-native";
-import { View } from "react-native";
+import React, { useContext } from "react";
+import { StyleSheet, Text } from "react-native";
 import { CurrentScoreContext } from "../../context/currentscore/CurrentScoreContext";
 
-
-
-
-
 export default function PriceCounter() {
+  const {currentScore} = useContext(CurrentScoreContext);
 
-    const {currentScore} = React.useContext(CurrentScoreContext);
-
-    // function incremantScore() { 
-    //     setCurrentScore(currentScore + 1)
-    // }
-
-
-
+  return (
+    <Text style={styles.text}> Poeng: {currentScore}</Text>      
+  );
+}
   
-    return (
-      <View style={styles.container}>
-            
-        <Text style={styles.text}> Poeng: {currentScore}</Text>
-
-      
-        
-      </View>
-    );
-  }
-  
-  const styles = StyleSheet.create({
-    container: {
-        flexDirection:"row",
-    alignItems: "center",
-    justifyContent: "center",
-    },
-
-    text: {
-        fontSize: 20,
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 20,
     fontWeight: "bold",
-    color: "black",
-    marginRight: 10,
+    color: "#BE185D",
+    marginRight: 8,
 
-    }
-
-    
-  });
+  },
+});

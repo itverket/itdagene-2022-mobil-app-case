@@ -10,7 +10,7 @@ import { GameMode } from "../models/gameStateEnum";
 import { RootStackScreenProps } from "../types";
 import shuffleArray from "../util/shuffleArray";
 import BehindBoxScreen from "./BehindBoxScreen";
-import { GibbershScreen } from "./Gibbersh";
+import { GibberishScreen } from "./GibberishScreen";
 import WordleScreen from "./WordleScreen";
 
 export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenProps<"Game">) => {
@@ -35,7 +35,7 @@ export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenPr
             case "W":
                 return <WordleScreen />;
             case "G":
-                return employeesToList && (<GibbershScreen employees={employeesToList} />)
+                return <GibberishScreen />;
             case "B": 
 				return <BehindBoxScreen />;
             default: 
