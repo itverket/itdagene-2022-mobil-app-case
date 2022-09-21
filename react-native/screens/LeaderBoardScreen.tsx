@@ -1,16 +1,9 @@
-import React, { useEffect } from "react";
-import {
-	Button,
-	Dimensions,
-	FlatList,
-	Image,
-	ScrollView,
-	StyleSheet,
-	View,
-} from "react-native";
 import Constants from "expo-constants";
-import { Text, Title } from "react-native-paper";
+import React from "react";
+import { Text, View, Dimensions, Image, StyleSheet, ScrollView } from "react-native";
+import { Title } from "react-native-paper";
 import { Wrapper } from "../components/layout/Wrapper";
+
 import { RootTabScreenProps } from "../types";
 
 interface IScoreBox {
@@ -41,7 +34,7 @@ export const LeaderBoard = ({
 						}}
 					/>
 				</View>
-				<Title>Leaderboard</Title>
+				<Title>Poengtavle</Title>
 			</View>
 
 			<ScrollView>

@@ -10,16 +10,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 
 import Colors from "../constants/Colors";
-import useColorScheme from "../hooks/useColorScheme";
-import { ModalScreen } from "../screens/ModalScreen";
-import { NotFoundScreen } from "../screens/NotFoundScreen";
 import { LeaderBoard } from "../screens/LeaderBoardScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import { RootStackParamList, RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import { UserSettingsScreen } from "../screens/UserSettingsScreen";
 import { GameScreen } from "../screens/GameScreen";
-import { Dimensions, Image, View } from "react-native";
+import { Dimensions, Image } from "react-native";
 
 export default function Navigation() {
 	return (
@@ -36,16 +33,18 @@ export default function Navigation() {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-	return (
-		<Stack.Navigator screenOptions={{ headerShown: false }}>
-			<Stack.Screen name="Root" component={BottomTabNavigator} />
-			<Stack.Screen name="NotFound" component={NotFoundScreen} />
-			<Stack.Screen name="Game" component={GameScreen} />
-			<Stack.Group screenOptions={{ presentation: "modal" }}>
-				<Stack.Screen name="Modal" component={ModalScreen} />
-			</Stack.Group>
-		</Stack.Navigator>
-	);
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="Root"
+        component={BottomTabNavigator}
+      />
+      <Stack.Screen
+        name="Game"
+        component={GameScreen}
+      />
+    </Stack.Navigator>
+  );
 }
 
 /**
@@ -55,13 +54,11 @@ function RootNavigator() {
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
-	const colorScheme = useColorScheme();
 
 	return (
 		<BottomTab.Navigator
 			initialRouteName="Home"
 			screenOptions={{
-				tabBarActiveTintColor: Colors[colorScheme].tint,
 				headerShown: false,
 				tabBarBackground: () => (
 					<Image
@@ -69,7 +66,7 @@ function BottomTabNavigator() {
 						resizeMode="contain"
 						style={{
 							position: "absolute",
-							bottom: -22,
+							bottom: 0,
 							left: 0,
 							width: Dimensions.get("window").width,
 							shadowColor: "#000",
