@@ -1,12 +1,20 @@
 import { Feather } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native";
+import { FC } from "react";
 import { Pressable, View } from "react-native"
 import { RootStackScreenProps } from "../../types";
 
-const Header = () => {
+type HeaderProps = {
+    callback?: () => void;
+}
+const Header: FC<HeaderProps> = ({callback}) => {
     const navigation = useNavigation<RootStackScreenProps<"Game">['navigation']>();
-    const handleBack = () => navigation.goBack();
 
+    const handleBack = () => {
+        if(callback) callback();
+        navigation.goBack();
+    }
+    
     return (
         <View style={{top: 0, left: 0, flexDirection: "row", justifyContent: "flex-start", paddingRight: 16, paddingLeft: 16}}>
             <Pressable onPress={handleBack}>

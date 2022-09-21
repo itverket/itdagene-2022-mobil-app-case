@@ -19,7 +19,7 @@ export const GameScreen = ({
 }: RootStackScreenProps<"Game">) => {
 	const [isNormalPlay, setIsNormalPlay] = useState<boolean>(false);
 	
-	const { gameMode, setEmployees } = useContext(GameContext);
+	const { gameMode, setEmployees, setLearningArray } = useContext(GameContext);
 	const { loading, employees } = useFetchEmployees();
 
 	useEffect(() => {
@@ -44,9 +44,13 @@ export const GameScreen = ({
 		}
 	};
 
+	const backCallback = () => {
+		if (gameMode === GameMode.practice) setLearningArray([]);
+	}
+
     return (
         <Wrapper>
-            <Header />
+            <Header callback={backCallback}/>
             {loading && <Loading />}
             {!isNormalPlay && employees && <FlashCardComponent setIsNormalPlay={setIsNormalPlay} />}
             {isNormalPlay && getContent()}
