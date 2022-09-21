@@ -42,6 +42,7 @@ function handleInput(letter: string) {
         onChangeText={(input:string) => handleInput(input)}
         value={userInput}
         maxLength={1}
+        autoFocus={letterIndex === 0}
       />
 
       

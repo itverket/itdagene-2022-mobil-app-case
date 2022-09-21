@@ -5,10 +5,12 @@ import GibberishLetterInput from "../components/gibbershletterinput";
 import PriceCounter from "../components/pointscounter";
 import { CurrentScoreContext } from "../context/currentscore/CurrentScoreContext";
 import { Employee } from "../hooks/useFetchEmployees";
+import { RootStackParamList, RootTabScreenProps } from "../types";
 
 
 export type GameProp = {
     employees: Employee[];
+
 }
 
 const IMAGE_WIDTH = Dimensions.get("window").width;
@@ -40,6 +42,10 @@ export const GibbershScreen = ({employees}:GameProp) => {
 
     const [userInputDict, setUserInputDict] = React.useState<Map<number, string>>(new Map<number, string>())
 
+    const [health, setHealth] = React.useState<number>(3);
+
+
+
 
 
 
@@ -58,6 +64,16 @@ return Array.from(userInputDict.values()).some((value:string, key:number) => val
 }
 
 useEffect(() => {
+
+  if(health === 0) {
+    setCurrentEmployeeIndex(0);
+    setUserInputDict(new Map<number, string>());
+    setCurrentScore(0);
+    // navigationContainer.navigate("GameOver");
+  }
+}, [health, setHealth]);
+
+useEffect(() => {
   console.log("tirgger");
   if(userInputDict.size == currentEmployeeFirstName.length) {
     let correct = checkIfCorrectAnswer()
@@ -68,6 +84,7 @@ useEffect(() => {
     }
     setNextEmployee();
     setUserInputDict(new Map<number, string>());
+    setHealth(health - 1);
 
   }
 },[userInputDict])
@@ -111,6 +128,7 @@ useEffect(() => {
     return (
       <KeyboardAvoidingView style={styles.container}>
         <PriceCounter/>
+        <Text style={styles.text_lives}>Gjenstående forsøk: {health}</Text>
 
 
 
@@ -177,8 +195,14 @@ useEffect(() => {
         width: 250,
         height: 250,
       },
+      text_lives: {
+        fontSize: 20,
+    fontWeight: "bold",
+    color: "red",
+    marginRight: 10,
 
 
-      }
+
+      }}
   );
   
