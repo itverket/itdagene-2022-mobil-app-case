@@ -4,9 +4,11 @@ import { FlashCardComponent } from "../components/games/FlashCardComponent";
 import Header from "../components/layout/Header";
 import { Wrapper } from "../components/layout/Wrapper";
 import { Loading } from "../components/status/Loading";
+import { CurrentScoreContext } from "../context/currentscore/CurrentScoreContext";
 import { GameContext } from "../context/GameContext";
 import { useFetchEmployees } from "../hooks/useFetchEmployees";
 import { GameMode } from "../models/gameStateEnum";
+import asyncStorageService from "../services/asyncStorageService";
 import { RootStackScreenProps } from "../types";
 import shuffleArray from "../util/shuffleArray";
 import BehindBoxScreen from "./BehindBoxScreen";
@@ -17,6 +19,8 @@ export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenPr
     const [isNormalPlay, setIsNormalPlay] = useState<boolean>(false);
     const {gameMode, setEmployees, setLearningArray} = useContext(GameContext);
     const {loading, employees} = useFetchEmployees();
+
+    const {currentScore, setLeaderBoardScores} = useContext(CurrentScoreContext);
 
     useEffect(() => {
         if (gameMode === GameMode.evaluation) {
@@ -43,8 +47,16 @@ export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenPr
         }
     }
 
-	const backCallback = () => {
+	const backCallback = async () => {
 		if (gameMode === GameMode.practice) setLearningArray([]);
+
+        if (currentScore > 0) {
+            const data = {score: currentScore, game: gameType};
+            await asyncStorageService("SET", data);
+
+            //@ts-ignore
+            setLeaderBoardScores((prev) => [...prev, data]);
+        }
 	}
 
     return (

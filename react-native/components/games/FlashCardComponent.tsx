@@ -24,8 +24,6 @@ export const FlashCardComponent: FC<Props> = ({setIsNormalPlay}) => {
         if (learningArray.length === 10) {
             setIsNormalPlay(true);
         }
-        console.log(learningArray);
-        console.log(learningArray.length);
     }, [learningArray]);
 
     function handleNope(card: Employee) {

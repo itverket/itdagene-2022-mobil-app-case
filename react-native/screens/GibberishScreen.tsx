@@ -30,7 +30,7 @@ export const GibberishScreen = () => {
   const [shuffledName, setShuffledName] = useState<string>("");
   
   const { gameMode, employees, learningArray } = useContext(GameContext);
-  const { currentScore, setCurrentScore } = useContext(CurrentScoreContext);
+  const { setCurrentScore } = useContext(CurrentScoreContext);
 
   const navigation = useNavigation<RootStackScreenProps<"Game">['navigation']>();
 
@@ -55,7 +55,7 @@ export const GibberishScreen = () => {
     if (userInputDict.size == firstName.length && firstName.length > 0) {
       if (checkIfCorrectAnswer()) {
         //@ts-ignore
-        setCurrentScore((wasScore) => wasScore + 1);
+        setCurrentScore((wasScore) => wasScore + 50);
       } else {
         if (health > 1) {
           setHealth((prev) => prev - 1);
@@ -90,7 +90,7 @@ export const GibberishScreen = () => {
   if (!currentEmployee) return <Loading />;
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={{height: "50%", width: "100%", justifyContent: "center", alignItems: "center"}}>
         <Title style={{textAlign: "center", fontSize: 36, paddingTop: 10, width: "100%", marginLeft: "auto", marginRight: "auto"}}>Hvem er dette?</Title>
         <Paragraph style={{ width: "75%", textAlign: "center", marginLeft: "auto", marginRight: "auto", fontSize: 12}}>Bak gibberishen finner du navnet til personen på bildet.</Paragraph>

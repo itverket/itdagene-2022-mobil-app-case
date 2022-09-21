@@ -24,7 +24,10 @@ import Animated, {
 	withTiming,
 	FadeIn,
 } from "react-native-reanimated";
+import { Health } from "../components/Health";
+import PriceCounter from "../components/pointscounter";
 import { Loading } from "../components/status/Loading";
+import { CurrentScoreContext } from "../context/currentscore/CurrentScoreContext";
 import { GameContext } from "../context/GameContext";
 import { Employee } from "../hooks/useFetchEmployees";
 import { getStatuses, getStatusesDisplay, CharStatus } from "../lib/statuses";
@@ -242,8 +245,9 @@ const WordleInner: FC<{employee: Employee, handleNext: () => void}> = ({employee
 	const [guesses, setGuesses] = useState<string[]>([]);
 	const [guess, setGuess] = useState<string>("");
 	const [isSwitchOn, setIsSwitchOn] = useState(true);
-	const [wrongGuesses, setWrongGuesses] = useState<number>(0);
-	const [score, setScore] = useState<number>(0);
+	const [health, setHealth] = useState<number>(3);
+
+	const {currentScore, setCurrentScore} = useContext(CurrentScoreContext);
 
 	const navigation = useNavigation<RootStackScreenProps<"Game">['navigation']>();
 
@@ -277,7 +281,7 @@ const WordleInner: FC<{employee: Employee, handleNext: () => void}> = ({employee
 			setGuesses((guesses) => [...guesses, guess]);
 			setGuess("");
 			if (guess.toLocaleUpperCase() === firstName.toLocaleUpperCase()) {
-				setScore((score) => score + 1);
+				setCurrentScore(currentScore + 50);
 				setTimeout(() => {
 					setGuesses([]);
 				}, 500);
@@ -287,10 +291,10 @@ const WordleInner: FC<{employee: Employee, handleNext: () => void}> = ({employee
 				}, 1000);
 			} else if (guesses.length === tries - 1) {
 				setGuesses([]);
-				if (wrongGuesses < 2) {
-					setWrongGuesses((wrongGuesses) => wrongGuesses + 1);
+				if (health > 1) {
+					setHealth((wasHealth) => wasHealth - 1);
 				} 
-				if (wrongGuesses === 2) {
+				if (health === 1) {
 					navigation.goBack();
 				}
 				handleNext();
@@ -315,6 +319,7 @@ const WordleInner: FC<{employee: Employee, handleNext: () => void}> = ({employee
 				entering={FadeIn}
 				style={[innerStyles.image, animatedStyles]}
 			>
+				<Text>{firstName}</Text>
 				<Image
 					source={{ uri: employee.image }}
 					style={innerStyles.image}
@@ -328,13 +333,15 @@ const WordleInner: FC<{employee: Employee, handleNext: () => void}> = ({employee
 			/>
 		</View>
 		<View style={styles.keyboardWrapper}>
-			<View style={{flexDirection: "row", justifyContent: "center", marginBottom: 8}}>
-				<Text style={{marginRight: 8, fontSize: 20, fontWeight: "500", textAlign: "center", color: "#BE185D"}}>Antall poeng: {score}</Text>
-				<Text style={{fontSize: 20, fontWeight: "500", textAlign: "center", color: "red"}}>Antall feil: {wrongGuesses}</Text>
-			</View>
 			<View style={styles.switch}>
 				<Text style={{fontWeight: "500"}}>Vis bilde</Text>
-				<Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
+				<Switch 
+					value={isSwitchOn} 
+					onValueChange={onToggleSwitch} 
+					trackColor={{ false: "#767577", true: "#BE185D" }}
+          			thumbColor={isSwitchOn ? "#ffffff" : "#f4f3f4"}
+          			ios_backgroundColor="#3e3e3e"
+				/>
 			</View>
 			<WordleKeyboard
 				guesses={guesses}
@@ -343,7 +350,28 @@ const WordleInner: FC<{employee: Employee, handleNext: () => void}> = ({employee
 				setGuess={setGuess}
 				guess={guess}
 			/>
+			<View 
+			style={{
+				flexDirection: "row",
+				justifyContent: "space-between",
+				padding: 10,
+				backgroundColor: "#FFD4BE",
+				borderRadius: 12,
+				shadowColor: "#000",
+				shadowOffset: {
+					width: 0,
+					height: 2,
+				},
+				shadowOpacity: 0.25,
+				shadowRadius: 3.84,
+				width: "80%",
+        	}}
+		>
+          <PriceCounter />
+          <Health health={health} />
+        </View>
 		</View>
+		
 		</>
 	);
 };
@@ -390,7 +418,6 @@ const styles = StyleSheet.create({
 		marginBottom: 8,
 		width: "40%",
 		marginLeft: "auto",
-		marginRight: "auto",
 	},
 
 	// Guess
@@ -402,7 +429,8 @@ const styles = StyleSheet.create({
 	// Keyboard
 	keyboardWrapper: {
 		height: "50%",
-		justifyContent: "center",
+		justifyContent: "space-around",
+		alignItems: "center",
 	},
 	keyboard: { flexDirection: "column", marginTop: 10 },
 	keyboardRow: {
