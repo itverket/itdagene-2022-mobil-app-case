@@ -18,28 +18,20 @@ export type RootStackParamList = {
 		employee: Employee;
 	};
 	NotFound: undefined;
+	Game: {
+		gameType: "W" | "B" | "G";
+	};
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 	NativeStackScreenProps<RootStackParamList, Screen>;
 
 export type RootTabParamList = {
-<<<<<<< HEAD
-  Home: undefined
-  LeaderBoard: undefined;
-  UserSettings: undefined;
-  Game: {
-    gameType: 'W' | 'B' | 'H' | 'G';
-  }
-=======
 	Home: undefined;
 	LeaderBoard: undefined;
 	UserSettings: undefined;
-	Wordle: undefined;
-	Game: {
-		gameType: "W" | "B" | "H";
-	};
->>>>>>> origin/wordle
+
+
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =

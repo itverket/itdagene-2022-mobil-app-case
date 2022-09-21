@@ -2,15 +2,16 @@ import React, { Dispatch, useState } from "react";
 
 import { StyleSheet, Switch, Text } from "react-native";
 import { View } from "react-native";
+import { GameContext } from "../../context/GameContext";
 
-import { GameModeContext } from "../../context/gamemode/GameModeContext";
+
 import { GameMode } from "../../models/gameStateEnum";
 
 
 
 export default function GameModeToggleSwitch() {
 
-    const {gameMode, setGameMode} = React.useContext(GameModeContext);
+    const {gameMode, setGameMode} = React.useContext(GameContext);
     const isLearning = gameMode === GameMode.practice;
 
     
@@ -53,7 +54,7 @@ export default function GameModeToggleSwitch() {
     text: {
         fontSize: 20,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
     marginRight: 10,
 
     }

@@ -11,9 +11,9 @@ import {
 } from "react-native";
 import { Button, Card, Paragraph, Switch, Title } from "react-native-paper";
 import { Wrapper } from "../components/layout/Wrapper";
-import { Employee, useFetchEmployees } from "../hooks/useFetchEmployees";
+import { GameContext } from "../context/GameContext";
+import { Employee } from "../hooks/useFetchEmployees";
 import { getStatuses, getStatusesDisplay, CharStatus } from "../lib/statuses";
-import { RootStackScreenProps, RootTabScreenProps } from "../types";
 
 const testData: Employee[] = [
 	{
@@ -137,10 +137,30 @@ const WordleDisplay = ({ guesses, name, guess, tries }: IWordleStats) => {
 };
 
 const WordleKey = ({ value, onClick, status = "none" }: IWordleKey) => {
+	let bgcolor = "rgba(255,255,255,0.3)";
+	let color = "#000";
+	if (status === "present") bgcolor = "#e4ce6b";
+	else if (status === "absent") bgcolor = "#8a9295";
+	else if (status === "correct") bgcolor = "#7cbe76";
+	if (["present", "absent", "correct"].includes(status)) color = "#fff";
+
+	const innerStyles = StyleSheet.create({
+		key: {
+			backgroundColor: bgcolor,
+			padding: 8,
+			margin: 2,
+			borderRadius: 5,
+		},
+		keyLetter: {
+			color: color,
+			fontWeight: "500",
+			fontSize: 15,
+		},
+	});
 	return (
 		<TouchableOpacity onPress={() => onClick(value)}>
-			<View style={styles.key}>
-				<Text style={styles.keyLetter}>{value}</Text>
+			<View style={innerStyles.key}>
+				<Text style={innerStyles.keyLetter}>{value}</Text>
 			</View>
 		</TouchableOpacity>
 	);
@@ -152,10 +172,12 @@ const WordleKeyboard = ({
 	onCallback,
 	setGuess,
 	guess,
+	gameOver,
 }: IWordleKeyboard) => {
 	const charStatuses = getStatuses(name, guesses);
 
 	const onClick = (value: string) => {
+		if (gameOver) return;
 		if (value === "ENTER") {
 			onCallback(guess);
 		} else if (value === "DELETE") {
@@ -178,10 +200,10 @@ const WordleKeyboard = ({
 				}
 			}
 		};
-		window.addEventListener("keyup", listener);
+		/* window.addEventListener("keyup", listener);
 		return () => {
 			window.removeEventListener("keyup", listener);
-		};
+		}; */
 	}, [onCallback]);
 
 	return (
@@ -192,7 +214,7 @@ const WordleKeyboard = ({
 						value={key}
 						key={key}
 						onClick={onClick}
-						status={charStatuses[Math.max(0, guesses.length - 1)][key]}
+						status={charStatuses[key]}
 					/>
 				))}
 			</View>
@@ -202,7 +224,7 @@ const WordleKeyboard = ({
 						value={key}
 						key={key}
 						onClick={onClick}
-						status={charStatuses[Math.max(0, guesses.length - 1)][key]}
+						status={charStatuses[key]}
 					/>
 				))}
 			</View>
@@ -213,7 +235,7 @@ const WordleKeyboard = ({
 						value={key}
 						key={key}
 						onClick={onClick}
-						status={charStatuses[Math.max(0, guesses.length - 1)][key]}
+						status={charStatuses[key]}
 					/>
 				))}
 				<WordleKey value="DELETE" onClick={onClick} />
@@ -222,16 +244,28 @@ const WordleKeyboard = ({
 	);
 };
 
-export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
+const WordleScreen = () => {
 	const [guesses, setGuesses] = useState<string[]>([]);
 	const [guess, setGuess] = useState<string>("");
 	const [gameOver, setGameOver] = useState<boolean>(false);
 	const [isSwitchOn, setIsSwitchOn] = useState(false);
-	const employee: Employee = testData[0];
-	const firstName = "tetsaa"; //employee.name.split(" ")[0];
+	let { employees } = React.useContext(GameContext);
+	const employee = employees[0];
+
+	if (!employee)
+		return (
+			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+				<Text>No employees found!</Text>
+			</View>
+		);
+
+	const firstName = employee.name.split(" ")[0];
 	const tries = 6;
 
-	const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+	const onToggleSwitch = () => {
+		if (gameOver) return;
+		setIsSwitchOn(!isSwitchOn);
+	};
 	const guessCallback = (guess: string) => {
 		if (guess.length === firstName.length) {
 			setGuesses((guesses) => [...guesses, guess]);
@@ -239,9 +273,11 @@ export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
 			if (guess.toLocaleUpperCase() === firstName.toLocaleUpperCase()) {
 				console.log("WIN");
 				setGameOver(true);
+				setIsSwitchOn(false);
 			} else if (guesses.length === tries - 1) {
 				console.log("LOSE");
 				setGameOver(true);
+				setIsSwitchOn(false);
 			}
 		} else console.log("error");
 	};
@@ -260,43 +296,38 @@ export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
 	});
 
 	return (
-		<Wrapper>
-			<SafeAreaView>
-				{!employee ? (
-					<Text>Loading...</Text>
-				) : (
-					<>
-						<View style={styles.game}>
-							<Image
-								style={innerStyles.image}
-								source={{ uri: employee.image }}
-							/>
-							<WordleDisplay
-								guesses={guesses}
-								name={firstName}
-								guess={guess}
-								tries={tries}
-								gameOver={gameOver}
-							/>
-						</View>
-						<View style={styles.switch}>
-							<Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
-							<Text style={{ marginTop: 6 }}>Show image</Text>
-						</View>
-						<View style={styles.keyboardWrapper}>
-							<WordleKeyboard
-								guesses={guesses}
-								name={firstName}
-								onCallback={guessCallback}
-								setGuess={setGuess}
-								guess={guess}
-								gameOver={gameOver}
-							/>
-						</View>
-					</>
-				)}
-			</SafeAreaView>
-		</Wrapper>
+		<View>
+			{!employee ? (
+				<Text>Loading...</Text>
+			) : (
+				<>
+					<View style={styles.game}>
+						<Image style={innerStyles.image} source={{ uri: employee.image }} />
+						<WordleDisplay
+							guesses={guesses}
+							name={firstName}
+							guess={guess}
+							tries={tries}
+							gameOver={gameOver}
+						/>
+					</View>
+					<View style={styles.switch}>
+						<Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
+						<Text style={{ marginTop: 6 }}>Show image</Text>
+					</View>
+					<View style={styles.keyboardWrapper}>
+						<WordleKeyboard
+							guesses={guesses}
+							name={firstName}
+							onCallback={guessCallback}
+							setGuess={setGuess}
+							guess={guess}
+							gameOver={gameOver}
+						/>
+					</View>
+				</>
+			)}
+		</View>
 	);
 };
 
@@ -317,7 +348,7 @@ const styles = StyleSheet.create({
 	// Guess
 	display: {
 		marginTop: 32,
-		minHeight: Dimensions.get("window").height - 310,
+		minHeight: Dimensions.get("window").height - 280,
 	},
 	guessRow: {
 		flexDirection: "row",
@@ -345,3 +376,5 @@ const styles = StyleSheet.create({
 		fontSize: 15,
 	},
 });
+
+export default WordleScreen;
