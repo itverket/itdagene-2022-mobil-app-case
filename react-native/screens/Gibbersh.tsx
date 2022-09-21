@@ -24,31 +24,36 @@ const IMAGE_HEIGHT = IMAGE_WIDTH * 1.3;
 let currentNameSize = 10;
 
 function shuffleString(str: string) {
-  let a = str?.split(""),
-    n = a?.length;
+  let a = str.split(""),
+    n = a.length;
 
   for (let i = n - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
-  return a?.join("");
+  return a.join("");
 }
 
-export const GibbershScreen = () => {
+
+
+
+export type GibberishScreenProps = {
+  employees: Employee[];
+}
+
+export const GibbershScreen = ({employees}:GibberishScreenProps) => {
   const navigation = useNavigation<RootStackScreenProps<"Game">['navigation']>();
-  const { employees, learningArray, gameMode } = useContext(GameContext);
-  const isLearning = gameMode === GameMode.practice;
-  const gameArray = isLearning ? learningArray : employees;
+
 
   const [currentEmployee, setCurrentEmployee] = React.useState<Employee>(
-    gameArray[0]
+    employees[0]
   ); 
   const [currentEmployeeIndex, setCurrentEmployeeIndex] =
-    React.useState<number>(0);
+    React.useState<number>(1);
   const [currentEmployeeFirstName, setCurrentEmployeeFirstName] =
-    React.useState<string>(currentEmployee?.name.split(" ")[0]);
+    React.useState<string>(currentEmployee.name.split(" ")[0]);
   const [currentNameShuffle, setCurrentNameShuffle] = React.useState<string>(
-    currentEmployee?.name.split(" ")[0]
+    currentEmployee.name.split(" ")[0]
   );
 
   const { currentScore, setCurrentScore } =
@@ -58,15 +63,9 @@ export const GibbershScreen = () => {
     new Map<number, string>()
   );
 
+  // console.log(employees)
   
-  useEffect(() => {
-
-    console.log(gameArray);
-  setCurrentEmployee(gameArray[0])
   
-
-  ,[gameArray, isLearning]})
-
   const [health, setHealth] = React.useState<number>(3);
 
   function addToUserInputDict(letterIndex: number, letter: string) {
@@ -75,11 +74,30 @@ export const GibbershScreen = () => {
 
   function checkIfCorrectAnswer(): boolean {
     {
-      return Array.from(userInputDict.values()).some(
-        (value: string, key: number) =>
-          value.toUpperCase() === currentEmployeeFirstName[key].toUpperCase()
-      );
+      // return Array.from(userInputDict.values()).some(
+      //   (value: string, key: number) =>
+      //   {
+
+      //     value.toUpperCase() === currentEmployeeFirstName[key].toUpperCase()
+      //     console.log(value.toUpperCase() === currentEmployeeFirstName[key].toUpperCase(), value, currentEmployeeFirstName[key])
+      //   }
+      // );
+
+    //   userInputDict.forEach((value: string, key: number) => {
+    //     if (value.toUpperCase() !== currentEmployeeFirstName[key].toUpperCase()) return false;
+    //   }) 
+    //     return true;
+      
+    // 
+    let nameInput = ""
+    for (let i=0; i<userInputDict.size; i++) { 
+      nameInput += userInputDict.get(i)
     }
+    console.log(nameInput, currentEmployeeFirstName, "JHIHKs", nameInput.trim().toUpperCase() === currentEmployeeFirstName.trim().toUpperCase())
+    return nameInput.trim().toUpperCase() === currentEmployeeFirstName.trim().toUpperCase()
+  }
+  
+      
   }
 
   useEffect(() => {
@@ -93,7 +111,8 @@ export const GibbershScreen = () => {
 
   useEffect(() => {
     console.log("tirgger");
-    if (userInputDict.size == currentEmployeeFirstName?.length) {
+    if (userInputDict.size == currentEmployeeFirstName.length) {
+      // console.log(userInputDict, currentEmployeeFirstName);
       let correct = checkIfCorrectAnswer();
       console.log(
         "correct",
@@ -103,40 +122,44 @@ export const GibbershScreen = () => {
       );
       if (correct) {
         setCurrentScore(currentScore + 1);
+      } else {
+
+        setHealth(health - 1);
       }
       setNextEmployee();
       setUserInputDict(new Map<number, string>());
-      setHealth(health - 1);
     }
   }, [userInputDict]);
 
   useEffect(() => {
     setCurrentNameShuffle(shuffleString(currentEmployeeFirstName));
-    currentNameSize = currentEmployeeFirstName?.length;
+    currentNameSize = currentEmployeeFirstName.length;
   }, [currentEmployeeFirstName]);
 
   useEffect(() => {
     setCurrentEmployeeFirstName(
-      currentEmployee?.name.split(" ")[0].toUpperCase()
+      currentEmployee.name.split(" ")[0].toUpperCase()
     );
   }, [currentEmployee]);
 
   const setNextEmployee = () => {
-    if (currentEmployeeIndex < gameArray.length - 1) {
+    if (currentEmployeeIndex < employees.length - 1) {
       setCurrentEmployeeIndex(currentEmployeeIndex + 1);
-      setCurrentEmployee(gameArray[currentEmployeeIndex + 1]);
+      setCurrentEmployee(employees[currentEmployeeIndex + 1]);
       setCurrentEmployeeFirstName(
-        currentEmployee?.name.split(" ")[0].toUpperCase()
+        currentEmployee.name.split(" ")[0].toUpperCase()
       );
       // setUserInput("");
       setUserInputDict(new Map<number, string>());
     }
   };
 
+  console.log(currentEmployeeFirstName, currentNameShuffle);
+
 
 
   return (
-    gameArray.length>0 ?(
+    employees.length>0 && currentEmployee ?(
       <>
       
 
@@ -145,11 +168,11 @@ export const GibbershScreen = () => {
       <PriceCounter />
       <Text style={styles.text_lives}>Gjenstående forsøk: {health}</Text>
 
-      {currentEmployeeIndex === gameArray.length - 1 ? (
+      {currentEmployeeIndex === employees.length - 1 ? (
         <>
           <Image
             style={styles.image}
-            key={currentEmployee?.name}
+            key={currentEmployee.name}
             source={{
               uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Done.png/640px-Done.png",
             }}
@@ -162,8 +185,8 @@ export const GibbershScreen = () => {
         <>
           <Image
             style={styles.image}
-            key={currentEmployee?.name}
-            source={{ uri: currentEmployee?.image }}
+            key={currentEmployee.name}
+            source={{ uri: currentEmployee.image }}
             resizeMode="cover"
           />
 
@@ -172,7 +195,7 @@ export const GibbershScreen = () => {
       )}
 
       <View style={{ flexDirection: "row" }}>
-        {currentEmployeeFirstName?.split("").map((letter, index) => {
+        {currentEmployeeFirstName.split("").map((letter, index) => {
           return (
             <GibberishLetterInput
               currentNameSize={currentNameSize}

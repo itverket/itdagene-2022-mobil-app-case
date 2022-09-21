@@ -11,8 +11,25 @@ import WordleScreen from "./WordleScreen";
 
 export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenProps<"Game">) => {
     const [isNormalPlay, setIsNormalPlay] = useState<boolean>(false);
-    const {gameMode, setEmployees} = useContext(GameContext);
+    const {gameMode, setEmployees, learningArray} = useContext(GameContext);
     const {loading, employees, error} = useFetchEmployees();
+
+    const isLearning = gameMode === GameMode.practice;
+    let gameArray = isLearning ? learningArray : employees;
+    const shuffled = employees?.sort(() => 0.5 - Math.random());
+
+    let employeesToList = shuffled?.slice(0,11)
+
+    useEffect(() => {
+
+        if(gameArray) { 
+            const shuffled = gameArray.sort(() => 0.5 - Math.random());
+            console.log(shuffled)
+
+            gameArray = shuffled.slice(0, 11);
+        }
+
+    }, [gameArray])
 
     useEffect(() => {
         if (gameMode === GameMode.evaluation) {
@@ -31,7 +48,7 @@ export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenPr
             case "W":
                 return <WordleScreen />;
             case "G":
-                return <GibbershScreen />
+                return employeesToList && (<GibbershScreen employees={employeesToList} />)
             default: 
                 return <Text>Default</Text>
         }
