@@ -28,7 +28,8 @@ function handleInput(letter: string) {
     setUserInput(letter);
     addToUserInputDict(letterIndex, letter)
 }
-    const widthOfBox = (IMAGE_WIDTH - (10 + (currentNameSize * 10))) / currentNameSize;
+  let factor = currentNameSize? currentNameSize : 10;
+    const widthOfBox = (IMAGE_WIDTH - (10 + (factor * 10))) / factor;
 
     return (
       <View style={styles.container}>

@@ -6,6 +6,7 @@ import { GameContext } from "../context/GameContext";
 import { useFetchEmployees } from "../hooks/useFetchEmployees";
 import { GameMode } from "../models/gameStateEnum";
 import { RootStackScreenProps } from "../types";
+import { GibbershScreen } from "./Gibbersh";
 import WordleScreen from "./WordleScreen";
 
 export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenProps<"Game">) => {
@@ -29,6 +30,8 @@ export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenPr
         switch (gameType) {
             case "W":
                 return <WordleScreen />;
+            case "G":
+                return <GibbershScreen />
             default: 
                 return <Text>Default</Text>
         }
@@ -39,7 +42,7 @@ export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenPr
             {loading && <Text>Loading...</Text>}
             {error && <Text>Error: {error}</Text>}
             {!isNormalPlay && <FlashCardComponent setIsNormalPlay={setIsNormalPlay} />}
-            {isNormalPlay && getContent()}
+            {isNormalPlay && employees && getContent()}
         </Wrapper>
     );
 };
