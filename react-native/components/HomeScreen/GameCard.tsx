@@ -43,6 +43,8 @@ const GameCard = ({
 		},
 		card: {
 			margin: 12,
+			marginLeft: "auto",
+			marginRight: "auto",
 			width: large
 				? Dimensions.get("window").width - 24
 				: Dimensions.get("window").width / 2 - 24,
