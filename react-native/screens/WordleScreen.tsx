@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, {
+	Dispatch,
+	SetStateAction,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 import {
 	SafeAreaView,
 	ScrollView,
@@ -11,6 +17,14 @@ import {
 } from "react-native";
 import { Button, Card, Paragraph, Switch, Title } from "react-native-paper";
 import { Wrapper } from "../components/layout/Wrapper";
+import Constants from "expo-constants";
+import Animated, {
+	useSharedValue,
+	useAnimatedStyle,
+	Easing,
+	withTiming,
+	FadeIn,
+} from "react-native-reanimated";
 import { GameContext } from "../context/GameContext";
 import { Employee } from "../hooks/useFetchEmployees";
 import { getStatuses, getStatusesDisplay, CharStatus } from "../lib/statuses";
@@ -63,7 +77,7 @@ interface IWordleChar {
 const WIDTH = Math.min(Dimensions.get("window").width - 24, 380);
 
 const WordleChar = ({ value, nameLength, status = "none" }: IWordleChar) => {
-	let bgcolor = "rgba(255,255,255,0.3)";
+	let bgcolor = "rgba(0,0,0,0.1)";
 	let color = "#000";
 	if (status === "present") bgcolor = "#e4ce6b";
 	else if (status === "absent") bgcolor = "#8a9295";
@@ -73,7 +87,7 @@ const WordleChar = ({ value, nameLength, status = "none" }: IWordleChar) => {
 	const innerStyles = StyleSheet.create({
 		guessSquare: {
 			backgroundColor: bgcolor,
-			borderColor: "#fff",
+			borderColor: color !== "#fff" ? "#ccc" : "#777",
 			borderWidth: 2,
 			width: Math.min(270 / nameLength, 55),
 			height: Math.min(270 / nameLength, 55),
@@ -137,7 +151,7 @@ const WordleDisplay = ({ guesses, name, guess, tries }: IWordleStats) => {
 };
 
 const WordleKey = ({ value, onClick, status = "none" }: IWordleKey) => {
-	let bgcolor = "rgba(255,255,255,0.3)";
+	let bgcolor = "rgba(255,255,255,1)";
 	let color = "#000";
 	if (status === "present") bgcolor = "#e4ce6b";
 	else if (status === "absent") bgcolor = "#8a9295";
@@ -187,21 +201,6 @@ const WordleKeyboard = ({
 		}
 	};
 
-	useEffect(() => {
-		const listener = (e: KeyboardEvent) => {
-			if (e.code === "Enter") {
-				onClick("ENTER");
-			} else if (e.code === "Backspace") {
-				onClick("DELETE");
-			} else {
-				const key = e.key.toLocaleUpperCase();
-				if (key.length === 1 && key >= "A" && key <= "Z") {
-					onClick(key);
-				}
-			}
-		};
-	}, [onCallback]);
-
 	return (
 		<View style={styles.keyboard}>
 			<View style={styles.keyboardRow}>
@@ -244,18 +243,25 @@ const WordleScreen = () => {
 	const [guesses, setGuesses] = useState<string[]>([]);
 	const [guess, setGuess] = useState<string>("");
 	const [gameOver, setGameOver] = useState<boolean>(false);
-	const [isSwitchOn, setIsSwitchOn] = useState(false);
-	let { employees } = React.useContext(GameContext);
+	const [isSwitchOn, setIsSwitchOn] = useState(true);
+	let { employees } = useContext(GameContext);
 	const employee = employees[0];
 
-	if (!employee)
-		return (
-			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-				<Text>No employees found!</Text>
-			</View>
-		);
+	const fade = useSharedValue(0);
+	const animatedStyles = useAnimatedStyle(() => {
+		return {
+			opacity: fade.value ?? 0,
+		};
+	});
 
-	const firstName = employee.name.split(" ")[0];
+	useEffect(() => {
+		fade.value = withTiming(isSwitchOn ? 1 : 0, {
+			duration: 800,
+			easing: Easing.out(Easing.exp),
+		});
+	}, [isSwitchOn]);
+
+	const firstName = employee?.name?.split(" ")[0];
 	const tries = 6;
 
 	const onToggleSwitch = () => {
@@ -282,14 +288,20 @@ const WordleScreen = () => {
 		// Image
 		image: {
 			position: "absolute",
-			marginTop: 24,
+			marginTop: 16,
 			width: WIDTH,
 			height: WIDTH * 1.15,
-			opacity: isSwitchOn ? 1 : 0,
 			borderRadius: 12,
 			zIndex: 1,
 		},
 	});
+
+	if (!employee)
+		return (
+			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+				<Text>No employees found!</Text>
+			</View>
+		);
 
 	return (
 		<View>
@@ -298,7 +310,15 @@ const WordleScreen = () => {
 			) : (
 				<>
 					<View style={styles.game}>
-						<Image style={innerStyles.image} source={{ uri: employee.image }} />
+						<Animated.View
+							entering={FadeIn}
+							style={[innerStyles.image, animatedStyles]}
+						>
+							<Image
+								source={{ uri: employee.image }}
+								style={innerStyles.image}
+							/>
+						</Animated.View>
 						<WordleDisplay
 							guesses={guesses}
 							name={firstName}
@@ -309,7 +329,7 @@ const WordleScreen = () => {
 					</View>
 					<View style={styles.switch}>
 						<Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
-						<Text style={{ marginTop: 6 }}>Show image</Text>
+						<Text style={{ marginTop: -4 }}>Show image</Text>
 					</View>
 					<View style={styles.keyboardWrapper}>
 						<WordleKeyboard
@@ -330,9 +350,9 @@ const WordleScreen = () => {
 const styles = StyleSheet.create({
 	game: {
 		position: "relative",
-		flex: 1,
 		justifyContent: "space-between",
 		alignItems: "center",
+		marginTop: Constants.statusBarHeight,
 	},
 
 	// Switch
@@ -362,7 +382,7 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 	},
 	key: {
-		backgroundColor: "#d3d6da",
+		backgroundColor: "#fff",
 		padding: 8,
 		margin: 2,
 		borderRadius: 5,

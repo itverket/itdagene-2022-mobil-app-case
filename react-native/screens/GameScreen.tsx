@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Text } from "react-native";
 import { FlashCardComponent } from "../components/games/FlashCardComponent";
 import Header from "../components/layout/Header";
@@ -11,33 +11,35 @@ import { RootStackScreenProps } from "../types";
 import BehindBoxScreen from "./BehindBoxScreen";
 import WordleScreen from "./WordleScreen";
 
-export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenProps<"Game">) => {
-    const [isNormalPlay, setIsNormalPlay] = useState<boolean>(false);
-    const {gameMode, setEmployees} = useContext(GameContext);
-    const {loading, employees} = useFetchEmployees();
+export const GameScreen = ({
+	route: {
+		params: { gameType },
+	},
+}: RootStackScreenProps<"Game">) => {
+	const [isNormalPlay, setIsNormalPlay] = useState<boolean>(false);
+	const { gameMode, setEmployees } = useContext(GameContext);
+	const { loading, employees, error } = useFetchEmployees();
+	useEffect(() => {
+		if (gameMode === GameMode.evaluation) {
+			setIsNormalPlay(true);
+		} else {
+			setIsNormalPlay(false);
+		}
+		if (employees) {
+			setEmployees(employees);
+		}
+	}, [gameMode, employees]);
 
-    useEffect(() => {
-        if (gameMode === GameMode.evaluation) {
-            setIsNormalPlay(true);
-        } else {
-            setIsNormalPlay(false);
-        }
-        if (employees) {
-            setEmployees(employees);
-        }
-
-    }, [gameMode, employees]);
-
-    const getContent = () => {
-        switch (gameType) {
-            case "W":
-                return <WordleScreen />;
-            case "B":
-                return <BehindBoxScreen />;
-            default: 
-                return <Text>Default</Text>
-        }
-    }
+	const getContent = () => {
+		switch (gameType) {
+			case "W":
+				return <WordleScreen />;
+			case "B": 
+				return <BehindBoxScreen />;
+			default:
+				return <Text>Default</Text>;
+		}
+	};
 
     return (
         <Wrapper>
@@ -48,4 +50,3 @@ export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenPr
         </Wrapper>
     );
 };
-
