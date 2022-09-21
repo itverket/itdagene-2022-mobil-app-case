@@ -18,7 +18,6 @@ export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
 	const styles = StyleSheet.create({
 		container: {
 			display: "flex",
-			backgroundColor: "#EAE8FB",
 			height: "100%",
 			width: "100%",
 			flexDirection: "column",
