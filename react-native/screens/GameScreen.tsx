@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Text } from "react-native";
 import { FlashCardComponent } from "../components/games/FlashCardComponent";
 import Header from "../components/layout/Header";
@@ -8,6 +8,7 @@ import { GameContext } from "../context/GameContext";
 import { useFetchEmployees } from "../hooks/useFetchEmployees";
 import { GameMode } from "../models/gameStateEnum";
 import { RootStackScreenProps } from "../types";
+import shuffleArray from "../util/shuffleArray";
 import BehindBoxScreen from "./BehindBoxScreen";
 import WordleScreen from "./WordleScreen";
 
@@ -17,8 +18,10 @@ export const GameScreen = ({
 	},
 }: RootStackScreenProps<"Game">) => {
 	const [isNormalPlay, setIsNormalPlay] = useState<boolean>(false);
+	
 	const { gameMode, setEmployees } = useContext(GameContext);
-	const { loading, employees, error } = useFetchEmployees();
+	const { loading, employees } = useFetchEmployees();
+
 	useEffect(() => {
 		if (gameMode === GameMode.evaluation) {
 			setIsNormalPlay(true);
@@ -26,7 +29,7 @@ export const GameScreen = ({
 			setIsNormalPlay(false);
 		}
 		if (employees) {
-			setEmployees(employees);
+			setEmployees(shuffleArray(employees));
 		}
 	}, [gameMode, employees]);
 
@@ -45,7 +48,7 @@ export const GameScreen = ({
         <Wrapper>
             <Header />
             {loading && <Loading />}
-            {!isNormalPlay && <FlashCardComponent setIsNormalPlay={setIsNormalPlay} />}
+            {!isNormalPlay && employees && <FlashCardComponent setIsNormalPlay={setIsNormalPlay} />}
             {isNormalPlay && getContent()}
         </Wrapper>
     );
