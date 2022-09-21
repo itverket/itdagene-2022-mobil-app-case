@@ -3,7 +3,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 import useCachedResources from "./hooks/useCachedResources";
-import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import React from 'react';
@@ -17,7 +16,8 @@ const theme = {
 	// Specify custom property in nested object
 	colors: {
 		...DefaultTheme.colors,
-		primary: "#BADA55",
+		primary: "black",
+		
 	},
 };
 

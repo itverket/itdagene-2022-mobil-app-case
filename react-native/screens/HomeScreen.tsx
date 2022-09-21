@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import Constants from "expo-constants";
 import { Wrapper } from "../components/layout/Wrapper";
 import { RootTabScreenProps } from "../types";
@@ -8,17 +8,14 @@ import GameCard from "../components/HomeScreen/GameCard";
 import GameModeToggleSwitch from "../components/gamemodetoggle";
 
 const wordleImg = require("../assets/images/homescreen/wordle_logo2.png");
-const invisImg = require("../assets/images/homescreen/invis.png");
 const bhImg = require("../assets/images/homescreen/behindBox_logo2.png");
 const gbImg = require("../assets/images/homescreen/gibberish_logo2.png");
-const questionImg = require("../assets/images/homescreen/question_logo2.png");
 const logo = require("../assets/images/homescreen/logo.png");
 
 export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
 	const styles = StyleSheet.create({
 		container: {
 			display: "flex",
-			backgroundColor: "#EAE8FB",
 			height: "100%",
 			width: "100%",
 			flexDirection: "column",
@@ -69,13 +66,6 @@ export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
 						description="Rangerte bokstaver"
 						bgcolor="lightblue"
 						onPress={() => navigation.navigate("Game", { gameType: "G" })}
-					/>
-					<GameCard
-						cardTitle=""
-						imageURL={questionImg}
-						description=""
-						bgcolor="#afffaf"
-						onPress={() => {}}
 					/>
 				</View>
 				<View>
