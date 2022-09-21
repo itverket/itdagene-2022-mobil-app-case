@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import {
 	SafeAreaView,
-	ScrollView,
 	StyleSheet,
 	TouchableOpacity,
 	Text,
@@ -15,9 +14,7 @@ import {
 	Image,
 	Dimensions,
 } from "react-native";
-import { Button, Card, Paragraph, Switch, Title } from "react-native-paper";
-import { Wrapper } from "../components/layout/Wrapper";
-import Constants from "expo-constants";
+import { Switch } from "react-native-paper";
 import Animated, {
 	useSharedValue,
 	useAnimatedStyle,
@@ -114,7 +111,7 @@ const WordleDisplay = ({ guesses, name, guess, tries }: IWordleStats) => {
 
 	return (
 		<SafeAreaView>
-			<View style={styles.display}>
+			<View>
 				{new Array(tries).fill(0).map((_, i) => {
 					return (
 						<View key={i} style={styles.guessRow}>
@@ -305,67 +302,61 @@ const WordleScreen = () => {
 
 	return (
 		<View>
-			{!employee ? (
-				<Text>Loading...</Text>
-			) : (
-				<>
-					<View style={styles.game}>
-						<Animated.View
-							entering={FadeIn}
-							style={[innerStyles.image, animatedStyles]}
-						>
-							<Image
-								source={{ uri: employee.image }}
-								style={innerStyles.image}
-							/>
-						</Animated.View>
-						<WordleDisplay
-							guesses={guesses}
-							name={firstName}
-							guess={guess}
-							tries={tries}
-							gameOver={gameOver}
-						/>
-					</View>
-					<View style={styles.switch}>
-						<Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
-						<Text style={{ marginTop: -4 }}>Show image</Text>
-					</View>
-					<View style={styles.keyboardWrapper}>
-						<WordleKeyboard
-							guesses={guesses}
-							name={firstName}
-							onCallback={guessCallback}
-							setGuess={setGuess}
-							guess={guess}
-							gameOver={gameOver}
-						/>
-					</View>
-				</>
-			)}
+			<View style={styles.game}>
+				<Animated.View
+					entering={FadeIn}
+					style={[innerStyles.image, animatedStyles]}
+				>
+					<Image
+						source={{ uri: employee.image }}
+						style={innerStyles.image}
+					/>
+				</Animated.View>
+				<WordleDisplay
+					guesses={guesses}
+					name={firstName}
+					guess={guess}
+					tries={tries}
+					gameOver={gameOver}
+				/>
+			</View>
+			<View style={styles.keyboardWrapper}>
+				<View style={styles.switch}>
+					<Text style={{fontWeight: "500"}}>Vis bilde</Text>
+					<Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
+				</View>
+				<WordleKeyboard
+					guesses={guesses}
+					name={firstName}
+					onCallback={guessCallback}
+					setGuess={setGuess}
+					guess={guess}
+					gameOver={gameOver}
+				/>
+			</View>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
 	game: {
-		position: "relative",
-		justifyContent: "space-between",
+		justifyContent: "center",
 		alignItems: "center",
-		marginTop: Constants.statusBarHeight,
+		height: "50%",
 	},
 
 	// Switch
 	switch: {
+		flexDirection: "row",
+		justifyContent: "space-evenly",
 		alignItems: "center",
 		marginBottom: 8,
+		width: "40%",
+		marginLeft: "auto",
+		marginRight: "auto",
 	},
 
 	// Guess
-	display: {
-		marginTop: 32,
-		minHeight: Dimensions.get("window").height - 280,
-	},
 	guessRow: {
 		flexDirection: "row",
 		justifyContent: "center",
@@ -373,7 +364,8 @@ const styles = StyleSheet.create({
 
 	// Keyboard
 	keyboardWrapper: {
-		minHeight: Dimensions.get("window").height / 2,
+		height: "50%",
+		justifyContent: "center",
 	},
 	keyboard: { flexDirection: "column", marginTop: 10 },
 	keyboardRow: {
