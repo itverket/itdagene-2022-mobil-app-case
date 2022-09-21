@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Button, Card, Paragraph, Switch, Title } from "react-native-paper";
 import { Wrapper } from "../components/layout/Wrapper";
+import Constants from "expo-constants";
 import { GameContext } from "../context/GameContext";
 import { Employee } from "../hooks/useFetchEmployees";
 import { getStatuses, getStatusesDisplay, CharStatus } from "../lib/statuses";
@@ -73,7 +74,7 @@ const WordleChar = ({ value, nameLength, status = "none" }: IWordleChar) => {
 	const innerStyles = StyleSheet.create({
 		guessSquare: {
 			backgroundColor: bgcolor,
-			borderColor: "#fff",
+			borderColor: "#ccc",
 			borderWidth: 2,
 			width: Math.min(270 / nameLength, 55),
 			height: Math.min(270 / nameLength, 55),
@@ -137,7 +138,7 @@ const WordleDisplay = ({ guesses, name, guess, tries }: IWordleStats) => {
 };
 
 const WordleKey = ({ value, onClick, status = "none" }: IWordleKey) => {
-	let bgcolor = "rgba(255,255,255,0.3)";
+	let bgcolor = "rgba(255,255,255,1)";
 	let color = "#000";
 	if (status === "present") bgcolor = "#e4ce6b";
 	else if (status === "absent") bgcolor = "#8a9295";
@@ -186,25 +187,6 @@ const WordleKeyboard = ({
 			setGuess((guess) => (guess.length < name.length ? guess + value : guess));
 		}
 	};
-
-	useEffect(() => {
-		const listener = (e: KeyboardEvent) => {
-			if (e.code === "Enter") {
-				onClick("ENTER");
-			} else if (e.code === "Backspace") {
-				onClick("DELETE");
-			} else {
-				const key = e.key.toLocaleUpperCase();
-				if (key.length === 1 && key >= "A" && key <= "Z") {
-					onClick(key);
-				}
-			}
-		};
-		/* window.addEventListener("keyup", listener);
-		return () => {
-			window.removeEventListener("keyup", listener);
-		}; */
-	}, [onCallback]);
 
 	return (
 		<View style={styles.keyboard}>
@@ -286,7 +268,7 @@ const WordleScreen = () => {
 		// Image
 		image: {
 			position: "absolute",
-			marginTop: 24,
+			marginTop: Constants.statusBarHeight + 8,
 			width: WIDTH,
 			height: WIDTH * 1.15,
 			opacity: isSwitchOn ? 1 : 0,
@@ -313,7 +295,7 @@ const WordleScreen = () => {
 					</View>
 					<View style={styles.switch}>
 						<Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
-						<Text style={{ marginTop: 6 }}>Show image</Text>
+						<Text style={{ marginTop: -4 }}>Show image</Text>
 					</View>
 					<View style={styles.keyboardWrapper}>
 						<WordleKeyboard
@@ -334,9 +316,9 @@ const WordleScreen = () => {
 const styles = StyleSheet.create({
 	game: {
 		position: "relative",
-		flex: 1,
 		justifyContent: "space-between",
 		alignItems: "center",
+		marginTop: Constants.statusBarHeight,
 	},
 
 	// Switch
@@ -366,7 +348,7 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 	},
 	key: {
-		backgroundColor: "#d3d6da",
+		backgroundColor: "#fff",
 		padding: 8,
 		margin: 2,
 		borderRadius: 5,
