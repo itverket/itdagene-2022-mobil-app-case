@@ -1,6 +1,6 @@
 import React from "react";
-import { Image, StyleSheet, View } from "react-native";
-
+import { Dimensions, Image, StyleSheet, View } from "react-native";
+import Constants from "expo-constants";
 import { Wrapper } from "../components/layout/Wrapper";
 import { RootTabScreenProps } from "../types";
 
@@ -23,6 +23,7 @@ export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
 			flexDirection: "column",
 			alignItems: "center",
 			justifyContent: "space-evenly",
+			paddingTop: Constants.statusBarHeight,
 		},
 		logo: {
 			alignItems: "center",
@@ -42,7 +43,7 @@ export const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
 				<View style={styles.cardContainer}>
 					<GameCard
 						cardTitle="Random"
-						imageURL={wordleImg}
+						imageURL={invisImg}
 						description="Tilfeldig spill 🎲"
 						bgcolor="#ffc9c9"
 						onPress={() => navigation.navigate("Game", { gameType: "W" })}

@@ -8,6 +8,7 @@ import {
 	StyleSheet,
 	View,
 } from "react-native";
+import Constants from "expo-constants";
 import { Text, Title } from "react-native-paper";
 import { Wrapper } from "../components/layout/Wrapper";
 import { RootTabScreenProps } from "../types";
@@ -64,6 +65,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#FFF9E9",
 		paddingBottom: 8,
 		marginBottom: 12,
+		paddingTop: Constants.statusBarHeight,
 	},
 	wrapper: {
 		flex: 1,

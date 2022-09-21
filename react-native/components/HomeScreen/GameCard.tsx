@@ -54,6 +54,10 @@ const GameCard = ({
 			padding: 4,
 			alignItems: "center",
 		},
+		cardTitle: {
+			color: "black",
+			textAlign: "center",
+		},
 	});
 
 	return (
