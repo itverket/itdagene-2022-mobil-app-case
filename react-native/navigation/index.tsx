@@ -16,7 +16,7 @@ import { RootStackParamList, RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import { UserSettingsScreen } from "../screens/UserSettingsScreen";
 import { GameScreen } from "../screens/GameScreen";
-import { Dimensions, Image, View } from "react-native";
+import { Dimensions, Image } from "react-native";
 
 export default function Navigation() {
 	return (
@@ -54,6 +54,7 @@ function RootNavigator() {
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
+
 	return (
 		<BottomTab.Navigator
 			initialRouteName="Home"
@@ -65,7 +66,7 @@ function BottomTabNavigator() {
 						resizeMode="contain"
 						style={{
 							position: "absolute",
-							bottom: -22,
+							bottom: 0,
 							left: 0,
 							width: Dimensions.get("window").width,
 							shadowColor: "#000",
