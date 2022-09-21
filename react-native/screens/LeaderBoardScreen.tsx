@@ -34,7 +34,7 @@ export const LeaderBoard = ({
 						}}
 					/>
 				</View>
-				<Title>Leaderboard</Title>
+				<Title>Poengtavle</Title>
 			</View>
 
 			<ScrollView>
