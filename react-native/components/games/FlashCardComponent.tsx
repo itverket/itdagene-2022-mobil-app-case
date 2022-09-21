@@ -5,6 +5,7 @@ import SwipeCards from "react-native-swipe-cards-deck";
 import { GameContext } from "../../context/GameContext";
 import { Employee } from "../../hooks/useFetchEmployees";
 import { FlashCard } from "../cards/FlashCard";
+import { Loading } from "../status/Loading";
 
 type Props = {
     setIsNormalPlay: (isNormalPlay: boolean) => void;
@@ -23,17 +24,21 @@ export const FlashCardComponent: FC<Props> = ({setIsNormalPlay}) => {
         if (learningArray.length === 10) {
             setIsNormalPlay(true);
         }
+        console.log(learningArray);
+        console.log(learningArray.length);
     }, [learningArray]);
 
     function handleNope(card: Employee) {
-        setLearningArray([...learningArray, card]);
+        if (learningArray.length < 10) {
+            setLearningArray([...learningArray, card]);
+        }
         return true;
     };
 
     return (
         <>
-            <Title style={{textAlign: "center", fontSize: 36, padding: 20, top: 100, width: "100%", marginLeft: "auto", marginRight: "auto"}}>Lær deg navnene først!</Title>
-            <Paragraph style={{top: 75, width: "75%", textAlign: "center", marginLeft: "auto", marginRight: "auto", fontSize: 12}}>Swipe til venstre om du ikke vet hvem det er, og til høyre om du allerede kjenner personen.</Paragraph>
+            <Title style={{textAlign: "center", fontSize: 36, paddingTop: 20, width: "100%", marginLeft: "auto", marginRight: "auto"}}>Lær deg navnene først!</Title>
+            <Paragraph style={{width: "75%", textAlign: "center", marginLeft: "auto", marginRight: "auto", fontSize: 12}}>Swipe til venstre om du ikke vet hvem det er, og til høyre om du allerede kjenner personen.</Paragraph>
             <SwipeCards 
                 cards={employees} 
                 renderCard={(cardData: Employee) => 
@@ -45,7 +50,7 @@ export const FlashCardComponent: FC<Props> = ({setIsNormalPlay}) => {
                 />
                 } 
                 keyExtractor={(cardData: Employee) => cardData.name}
-                renderNoMoreCards={() => console.log("no more cards")}
+                renderNoMoreCards={() => <Loading />}
 
                 stack
                 stackDepth={3}
