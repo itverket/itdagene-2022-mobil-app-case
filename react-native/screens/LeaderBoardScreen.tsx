@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import { Button, Dimensions, FlatList, Image, StyleSheet } from "react-native";
+import React from "react";
+import { Text, View, Dimensions, FlatList, Image, StyleSheet } from "react-native";
 import GameModeToggleSwitch from "../components/gamemodetoggle";
 import { Wrapper } from "../components/layout/Wrapper";
 
-import { Text, View } from "../components/Themed";
 import { Employee, useFetchEmployees } from "../hooks/useFetchEmployees";
 import { RootTabScreenProps } from "../types";
 
