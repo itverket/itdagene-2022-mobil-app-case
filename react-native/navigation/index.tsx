@@ -5,22 +5,18 @@
  */
 import { Feather } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  NavigationContainer,
-} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 
 import Colors from "../constants/Colors";
 import { LeaderBoard } from "../screens/LeaderBoardScreen";
 import { HomeScreen } from "../screens/HomeScreen";
-import {
-  RootStackParamList,
-  RootTabParamList,
-} from "../types";
+import { RootStackParamList, RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import { UserSettingsScreen } from "../screens/UserSettingsScreen";
 import { GameScreen } from "../screens/GameScreen";
+import { Dimensions, Image, View } from "react-native";
 
 export default function Navigation() {
 	return (
@@ -63,7 +59,33 @@ function BottomTabNavigator() {
 			initialRouteName="Home"
 			screenOptions={{
 				headerShown: false,
+				tabBarBackground: () => (
+					<Image
+						source={require("../assets/images/curve.png")}
+						resizeMode="contain"
+						style={{
+							position: "absolute",
+							bottom: -22,
+							left: 0,
+							width: Dimensions.get("window").width,
+							shadowColor: "#000",
+							shadowOffset: {
+								width: 0,
+								height: -3,
+							},
+							shadowOpacity: 0.47,
+							shadowRadius: 1.65,
+						}}
+					/>
+				),
 				tabBarShowLabel: false,
+				tabBarStyle: {
+					borderWidth: 0,
+					shadowColor: "transparent",
+					elevation: 0,
+					borderColor: "transparent",
+					borderTopColor: "transparent",
+				},
 			}}
 		>
 			<BottomTab.Screen
