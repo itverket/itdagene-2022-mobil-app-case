@@ -13,6 +13,7 @@ export type GameProp = {
 
 const IMAGE_WIDTH = Dimensions.get("window").width;
 const IMAGE_HEIGHT = IMAGE_WIDTH * 1.3;
+let currentNameSize = 10;
 
 function shuffleString(str: string) {
     let a = str.split(""),
@@ -48,9 +49,6 @@ function addToUserInputDict(letterIndex: number, letter: string) {
   setUserInputDict(new Map(userInputDict.set(letterIndex, letter)));
 }
 
-function checkIfInputAtIndexIsCorrect(value:string, key:number, map:Map<number, string>): boolean {
-  return value === currentEmployeeFirstName[key];
-}
 
 function checkIfCorrectAnswer():boolean {  {
 return Array.from(userInputDict.values()).some((value:string, key:number) => value.toUpperCase() === currentEmployeeFirstName[key].toUpperCase());
@@ -77,6 +75,7 @@ useEffect(() => {
 
     useEffect(() => {
         setCurrentNameShuffle(shuffleString(currentEmployeeFirstName))
+        currentNameSize = currentEmployeeFirstName.length;
     
     }, [currentEmployeeFirstName])
 
@@ -92,6 +91,7 @@ useEffect(() => {
         setCurrentEmployeeFirstName(currentEmployee.name.split(' ')[0].toUpperCase())
         // setUserInput("");
         setUserInputDict(new Map<number, string>());
+  
         }
     }
 
@@ -143,7 +143,7 @@ useEffect(() => {
 
         <View style={{flexDirection:"row"}}>
           {currentEmployeeFirstName.split("").map((letter, index) => {
-            return <GibberishLetterInput key= {currentEmployeeFirstName +index} letterIndex={index}  addToUserInputDict={addToUserInputDict}  />
+            return <GibberishLetterInput currentNameSize={currentNameSize} key= {currentEmployeeFirstName +index} letterIndex={index}  addToUserInputDict={addToUserInputDict}  />
           }
           )}
         </View>
@@ -179,13 +179,6 @@ useEffect(() => {
       },
 
 
-        input: {
-            height: 40,
-            margin: 12,
-            borderWidth: 1,
-            padding: 10,
-          
-        },
       }
   );
   
