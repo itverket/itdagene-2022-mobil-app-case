@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Text } from "react-native";
 import { FlashCardComponent } from "../components/games/FlashCardComponent";
 import Header from "../components/layout/Header";
@@ -8,31 +8,15 @@ import { GameContext } from "../context/GameContext";
 import { useFetchEmployees } from "../hooks/useFetchEmployees";
 import { GameMode } from "../models/gameStateEnum";
 import { RootStackScreenProps } from "../types";
+import shuffleArray from "../util/shuffleArray";
 import BehindBoxScreen from "./BehindBoxScreen";
 import { GibbershScreen } from "./Gibbersh";
 import WordleScreen from "./WordleScreen";
 
 export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenProps<"Game">) => {
     const [isNormalPlay, setIsNormalPlay] = useState<boolean>(false);
-    const {gameMode, setEmployees, learningArray} = useContext(GameContext);
-    const {loading, employees, error} = useFetchEmployees();
-
-    const isLearning = gameMode === GameMode.practice;
-    let gameArray = isLearning ? learningArray : employees;
-    const shuffled = employees?.sort(() => 0.5 - Math.random());
-
-    let employeesToList = shuffled?.slice(0,11)
-
-    useEffect(() => {
-
-        if(gameArray) { 
-            const shuffled = gameArray.sort(() => 0.5 - Math.random());
-            console.log(shuffled)
-
-            gameArray = shuffled.slice(0, 11);
-        }
-
-    }, [gameArray])
+    const {gameMode, setEmployees, setLearningArray} = useContext(GameContext);
+    const {loading, employees} = useFetchEmployees();
 
     useEffect(() => {
         if (gameMode === GameMode.evaluation) {
@@ -41,7 +25,7 @@ export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenPr
             setIsNormalPlay(false);
         }
         if (employees) {
-            setEmployees(employees);
+            setEmployees(shuffleArray(employees));
         }
 
     }, [gameMode, employees]);
@@ -59,3 +43,16 @@ export const GameScreen = ({ route: { params: { gameType }} }: RootStackScreenPr
         }
     }
 
+	const backCallback = () => {
+		if (gameMode === GameMode.practice) setLearningArray([]);
+	}
+
+    return (
+        <Wrapper>
+            <Header callback={backCallback}/>
+            {loading && <Loading />}
+            {!isNormalPlay && employees && <FlashCardComponent setIsNormalPlay={setIsNormalPlay} />}
+            {isNormalPlay && getContent()}
+        </Wrapper>
+    );
+};

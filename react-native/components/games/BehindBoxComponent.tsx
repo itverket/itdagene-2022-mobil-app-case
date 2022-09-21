@@ -58,11 +58,16 @@ const BehindBoxComponent = ({ employee, handleNext }: Props) => {
     const [score, setScore] = useState<number>(0);
     
     useEffect(() => {
-        setTimeout(() => {
+        let counterTimer = setTimeout(() => {
             setCounter((prev) => prev + 1);
         }, 1000);
         if (counter % 10 === 0) {
             handleRemove();
+        }
+
+        // cleanup function
+        return () => {
+            clearTimeout(counterTimer);
         }
     }, [counter]);
 
@@ -99,9 +104,6 @@ const BehindBoxComponent = ({ employee, handleNext }: Props) => {
             setIsCorrect(true);
             setTextInput("");
             setTimeout(() => {
-                setIsCorrect(false);
-            }, 500);
-            setTimeout(() => {
                 setCounter(0);
                 handleNextPlayer();
             }, 1000);
@@ -117,6 +119,7 @@ const BehindBoxComponent = ({ employee, handleNext }: Props) => {
             <KeyboardAvoidingView style={{alignItems: "center"}}>
                 <Title style={{textAlign: "center", fontSize: 36, paddingTop: 10, width: "100%", marginLeft: "auto", marginRight: "auto"}}>Hvem er bak boksen?</Title>
                 <Paragraph style={{ width: "75%", textAlign: "center", marginLeft: "auto", marginRight: "auto", fontSize: 12}}>En luke fjerner seg hvert 10. sekund. Jo raskere du finner navnet, jo fler poeng!</Paragraph>
+                <Text>{employee.name}</Text>
                 <View style={{height: "50%", marginTop: 8}}>
                     <Image source={{ uri: employee?.image }} style={{width: imageWidth, height: imageHeight, zIndex: 1, borderRadius: 12}} />
                     <View style={{position: "absolute", zIndex: 2, flexWrap: "wrap", height: imageHeight}}>
@@ -133,7 +136,7 @@ const BehindBoxComponent = ({ employee, handleNext }: Props) => {
                 </View>
                 <KeyboardAvoidingView style={{height: "50%"}}>
                     <TextInput label="Svar" value={textInput} onChangeText={(text) => handleChange(text)} style={{minWidth: "80%", maxHeight: 60, backgroundColor: '#fff'}} autoFocus/>
-                    <Paragraph style={{color: isCorrect ? "green": "red"}}>{isCorrect ? "Riktig svar!" : "Prøv litt til"}</Paragraph>
+                    <Paragraph style={{color: isCorrect ? "green": "#fff"}}>{isCorrect ? "Riktig svar!" : ""}</Paragraph>
                     <Text style={{fontSize: 20, fontWeight: "500", textAlign: "center", color: "#BE185D"}}>Antall poeng: {score}</Text>
                 </KeyboardAvoidingView>
             </KeyboardAvoidingView>
