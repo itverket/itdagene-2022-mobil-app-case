@@ -18,7 +18,6 @@ const theme = {
 	colors: {
 		...DefaultTheme.colors,
 		primary: "#BADA55",
-		
 	},
 };
 
