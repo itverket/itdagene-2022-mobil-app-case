@@ -89,7 +89,7 @@ function BottomTabNavigator() {
 				},
 			}}
 		>
-			<BottomTab.Screen
+			{/* <BottomTab.Screen
 				name="UserSettings"
 				component={UserSettingsScreen}
 				options={{
@@ -100,7 +100,7 @@ function BottomTabNavigator() {
 						/>
 					),
 				}}
-			/>
+			/> */}
 			<BottomTab.Screen
 				name="Home"
 				component={HomeScreen}
